@@ -4,15 +4,15 @@ from commands.generate import generate
 from commands.deploy import deploy
 
 
-@click.group('pydero')
+@click.group('deropy')
 @click.version_option()
 @click.option('--verbose', '-v', is_flag=True, help='Enable verbose logging')
-def solwr(verbose: bool):
-    """Pydero is a CLI for pydero."""
+def deropy(verbose: bool):
+    """deropy is a CLI for deropy."""
     pass
 
-solwr.add_command(generate)
-solwr.add_command(deploy)
+deropy.add_command(generate)
+deropy.add_command(deploy)
 
 if __name__ == '__main__':
-    solwr()
+    deropy()
