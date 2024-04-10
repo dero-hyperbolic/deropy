@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='deropy',
-    version=os.getenv('DEROPY_VERSION') or '0.0.1',
+    version=os.getenv('DEROPY_VERSION') or '0.0.2',
     url='https://github.com/lcances/deropy',
     author_email='leocances@gmail.com',
     description='A set of tool to help of DERO smart contract development',
