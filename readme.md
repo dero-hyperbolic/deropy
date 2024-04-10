@@ -10,9 +10,13 @@ pip install deropy
 
 ## Quick Start
 
-the following command will create:
-- a new SC.py file in the current directory.
+**If the simulator is running** the followin
+the following command will:
+- Deploy your smart contract to the simulator
+- Create a new SC.py file in the current directory with the correct SCID.
 - A new tests/test_sc.py file in the current directory.
+
+**If the simulator is not running** the Smart Contract will not be deployed
 
 SC.py will contain a class that allow you to call every function implemented in your smart contract
 test_sc.py will contain a test class that provide you with a basic test skeleton for every function implemented in your smart contract

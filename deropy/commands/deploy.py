@@ -2,7 +2,7 @@ import requests
 import click
 import json
 
-from commands.generate import _generate_class, _generate_tests
+from deropy.commands.generate import _generate_class, _generate_tests
 
 @click.command('deploy')
 @click.argument('file', type=click.Path())

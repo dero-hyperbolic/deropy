@@ -129,6 +129,10 @@ def _parse_function(lines: list) -> dict:
     for line in lines:
         if "Function " in line and not "End Function" in line:
             function_name = get_function_name(line)
+
+            if not function_name[0].isupper():
+                continue
+
             parameters = get_function_parameters(line)
             functions[function_name] = parameters
 
