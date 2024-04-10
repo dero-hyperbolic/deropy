@@ -7,6 +7,8 @@ setup(
     url='https://github.com/lcances/deropy',
     author_email='leocances@gmail.com',
     description='A set of tool to help of DERO smart contract development',
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     packages=find_packages(),
     install_requires=[
         'click==8.0.4',
