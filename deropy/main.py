@@ -1,21 +1,20 @@
 import click
 
+from deropy.commands.configure import configure
 from deropy.commands.generate import generate
 from deropy.commands.deploy import deploy
+from deropy.commands.transpile import transpile
 
 
 @click.group('deropy')
 @click.version_option()
-@click.option('--verbose', '-v', is_flag=True, help='Enable verbose logging')
-def deropy(verbose: bool):
-    """deropy is a CLI for deropy."""
-    
-    # if no arguments are passed, show the help message
-    if not any([verbose]):
-        click.echo(deropy.get_help(click.Context(deropy)))
+def deropy():
+    pass
 
 deropy.add_command(generate)
 deropy.add_command(deploy)
+deropy.add_command(transpile)
+deropy.add_command(configure)
 
 if __name__ == '__main__':
     deropy()

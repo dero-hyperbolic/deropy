@@ -1,0 +1,97 @@
+{
+    "function": {
+        "args": [
+            {
+                "name": "name",
+                "ntype": {
+                    "type": "Name",
+                    "value": "str"
+                },
+                "type": "Argument"
+            }
+        ],
+        "body": [
+            {
+                "condition": {
+                    "left": {
+                        "function": {
+                            "args": [
+                                {
+                                    "type": "Constant",
+                                    "value": "owner"
+                                }
+                            ],
+                            "name": "exists"
+                        },
+                        "type": "FunctionCall"
+                    },
+                    "op": {
+                        "type": "Operator",
+                        "value": "=="
+                    },
+                    "right": {
+                        "type": "Constant",
+                        "value": 0
+                    },
+                    "type": "Compare"
+                },
+                "else_body": [],
+                "if_body": [
+                    {
+                        "function": {
+                            "args": [
+                                {
+                                    "type": "Constant",
+                                    "value": "owner"
+                                },
+                                {
+                                    "function": {
+                                        "args": [],
+                                        "name": "signer"
+                                    },
+                                    "type": "FunctionCall"
+                                }
+                            ],
+                            "name": "store"
+                        },
+                        "type": "FunctionCall"
+                    },
+                    {
+                        "function": {
+                            "args": [
+                                {
+                                    "type": "Constant",
+                                    "value": "original_owner"
+                                },
+                                {
+                                    "type": "Constant",
+                                    "value": 0
+                                }
+                            ],
+                            "name": "store"
+                        },
+                        "type": "FunctionCall"
+                    },
+                    {
+                        "type": "Return",
+                        "value": {
+                            "type": "Constant",
+                            "value": 0
+                        }
+                    }
+                ],
+                "type": "IfTest"
+            },
+            {
+                "type": "Return",
+                "value": {
+                    "type": "Constant",
+                    "value": 1
+                }
+            }
+        ],
+        "name": "Initialize",
+        "returns": "number"
+    },
+    "type": "FunctionDef"
+}
