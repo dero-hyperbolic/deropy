@@ -43,8 +43,12 @@ pip install deropy
 
 ## Quick Start
 
-**If the simulator is running** the followin
-the following command will:
+```bash
+deropy deploy -g path/to/sc.bas
+```
+
+**If the simulator is running**
+this command will:
 - Deploy your smart contract to the simulator
 - Create a new SC.py file in the current directory with the correct SCID.
 - A new tests/test_sc.py file in the current directory.
@@ -53,10 +57,6 @@ the following command will:
 
 SC.py will contain a class that allow you to call every function implemented in your smart contract
 test_sc.py will contain a test class that provide you with a basic test skeleton for every function implemented in your smart contract
-
-```bash
-deropy deploy -g path/to/sc.bas
-```
 
 ### Usage in a python script or terminal
 ```python
@@ -71,7 +71,7 @@ sc.function_to_invoke(param1, param2)
 | Command | Description |
 | --- | --- |
 | `deropy configure` | Install the autocomplete script |
-| `deropy deploy` | Compile a DERO smart contract |
-| `deropy generate` | Test a DERO smart contract |
+| `deropy deploy` | deploy a DERO smart contract |
+| `deropy generate` | Convert a DERO smart contract into a python API|
 
 
