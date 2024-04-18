@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 setup(
     name='deropy',
     version=os.getenv('DEROPY_VERSION') or '0.0.3',
-    url='git@github.com:dero-hyperbolic/deropy.git',
+    url='https://github.com/dero-hyperbolic/deropy.git',
     author_email='leocances@gmail.com',
     description='A set of tool to help of DERO smart contract development',
     long_description=open('README.md').read(),
