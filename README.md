@@ -70,7 +70,7 @@ sc.function_to_invoke(param1, param2)
 
 | Command | Description |
 | --- | --- |
-| `deropy init` | Initialize a new DERO project |
+| `deropy configure` | Install the autocomplete script |
 | `deropy deploy` | Compile a DERO smart contract |
 | `deropy generate` | Test a DERO smart contract |
 
