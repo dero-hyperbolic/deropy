@@ -3,7 +3,7 @@ import json
 import os
 
 @click.command('generate')
-@click.option('-f', '--file', type=click.Path(), help='Create a file with the given name')
+@click.argument('file', type=click.Path())
 @click.option('-s', '--scid', type=str, help='The SCID of the smart contract', default='')
 def generate(file, scid):
     _generate_class(file, scid)
