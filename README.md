@@ -35,6 +35,12 @@ As I am actively using deropy to work on my own smart contracts, I will be addin
   - [ ] While loop :fire:
   - [ ] For loop ?
 
+**future version**
+- template support for standard smart-contract
+- NFT collection builder
+  - g45-c + g45-nft automatic deployment 
+- API builder for any SC already deployed on chain
+
 ## Installation
 
 ```bash
