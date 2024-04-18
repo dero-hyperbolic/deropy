@@ -58,6 +58,14 @@ test_sc.py will contain a test class that provide you with a basic test skeleton
 deropy deploy -g path/to/sc.bas
 ```
 
+### Usage in a python script or terminal
+```python
+from SC import SC
+sc = SC()
+sc.function_to_invoke(param1, param2)
+>>> {'jsonrpc': '2.0', 'id': '1', 'result': {'txid': '861fbb04b475fb94de9ba...'}}
+```
+
 ## Commands
 
 | Command | Description |
