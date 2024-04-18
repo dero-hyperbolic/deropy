@@ -1,6 +1,7 @@
 import logging
 
 from deropy.dvm.sc import SmartContract
+from deropy.dvm.utils import print_interpreter
 
 class Function:
     def __init__(self, name, compute_cost, storage_cost, parameters: dict):
@@ -32,8 +33,12 @@ class Function:
                 except:
                     raise Exception(f"Invalid type [str] for argument [{key}] provided to function [{self.name}], expected [int]")
             
-        print(f'interpreting: {self.name}({kwargs})') # This is the line that is printed
+        msg = [f'{self.name}({kwargs})']
         value = self._exec(**kwargs)
         self.sc.gasCompute.append(self.compute_cost)
         self.sc.gasStorage.append(self._computeGasStorageCost())
+        msg += [f'computeGas: {self.compute_cost}', f'storageGas: {self._computeGasStorageCost()}']
+
+        # print the message in three column of constant width
+        print_interpreter(msg)
         return value

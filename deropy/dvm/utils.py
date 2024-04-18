@@ -21,3 +21,17 @@ def flatten_list(l):
             output.append(i)
 
     return output
+
+def print_interpreter(msg: list):
+    def format_column(content, width):
+        if len(content) > width:
+            content = content[:width-3] + "..."
+        else:
+            content = content + " " * (width - len(content))
+        return content
+    
+    msg = f'{format_column(msg[0], 80)} {format_column(msg[1], 20)} {format_column(msg[2], 20)}'
+    print(msg)
+    
+
+    

@@ -67,10 +67,12 @@ def parse(path):
             
                 b["if_body"] = [json.loads(dast.Name(len(before_if) + 1).to_json())]
                 before_if.extend(if_body)
+                before_if.extend([json.loads(dast.Goto(len(before_if) + len(else_body)).to_json())])
 
                 if len(else_body) > 0:
                     b["else_body"] = [json.loads(dast.Name(len(before_if) + 1).to_json())]
                     before_if.extend(else_body)
+
                 
                 before_if.extend(after_if)
                 flatten_func_body = before_if

@@ -1,7 +1,5 @@
 import json
 
-from deropy.dvm.utils import type_intermediate_to_dvm
-import deropy.dvm.dast as dast
 import deropy.dvm.dast.dast_converter as dast_converter
 
 class VariableDeclaration():
