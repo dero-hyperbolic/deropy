@@ -18,4 +18,5 @@ from .Update_sc_code import update_sc_code
 from .Is_address_valid import is_address_valid
 from .Address_raw import address_raw
 from .Address_string import address_string
+from .Send_dero_to_address import send_dero_to_address
 from .Send_asset_to_address import send_asset_to_address
