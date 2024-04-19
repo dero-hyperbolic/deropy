@@ -1,7 +1,7 @@
 import logging
 
 from deropy.dvm.functions.Function import Function
-from deropy.dvm.sc import SmartContract
+
 
 class Delete(Function):
     def __init__(self):

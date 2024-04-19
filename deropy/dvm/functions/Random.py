@@ -2,7 +2,7 @@ import logging
 import random as rd
 
 from deropy.dvm.functions.Function import Function
-from deropy.dvm.sc import SmartContract
+
 
 class Random(Function):
     def __init__(self):

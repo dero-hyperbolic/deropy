@@ -1,7 +1,6 @@
 import logging
 
 from deropy.dvm.functions.Function import Function
-from deropy.dvm.sc import SmartContract
 
 class MapDelete(Function):
     def __init__(self):

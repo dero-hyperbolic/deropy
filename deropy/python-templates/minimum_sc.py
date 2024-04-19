@@ -9,20 +9,6 @@ class Storage:
         else:
             return 1
     
-    def UpdateCode(code: str) -> int:
-        if load("owner") != signer():
-            return 1
-        
-        store("code", code)
-        store("code", load("code") + code)
-
-        a: int = 0
-        b: int = 0
-        while a < 10:
-            a = a + 1
-            b = b + 1
-        return 0
-    
 
 if __name__ == '__main__':
     import inspect
