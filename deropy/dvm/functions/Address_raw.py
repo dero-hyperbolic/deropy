@@ -8,7 +8,7 @@ class AddressRaw(Function):
         super().__init__("address_raw", 60_000, 0, func_parameters)
 
     def _computeGasStorageCost(self):
-        return 0  # FIXME: This is a placeholder value
+        return len(self.parameters["address"]["value"])
 
     def _exec(self, *args, **kwargs):
         self.parameters["address"]["value"] = kwargs["address"]
