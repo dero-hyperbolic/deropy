@@ -15,5 +15,5 @@ class BlockTimestamp(Function):
     def _computeGasStorageCost(self):
         return 0
         
-def block_height():
+def block_timestamp():
     return BlockTimestamp()()
