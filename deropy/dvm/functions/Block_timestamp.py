@@ -16,4 +16,4 @@ class BlockTimestamp(Function):
         return 0
         
 def block_height():
-    return BlockHeight()()
+    return BlockTimestamp()()
