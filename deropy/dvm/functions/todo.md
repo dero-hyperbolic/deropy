@@ -5,10 +5,10 @@
 | Function  |     | Function  |     | Function  |     |
 |-----------|----|-----------------------|----|-----------|----|
 | VERSION   | 🟥 | DERO                  | 🟧 | ITOA      | 🟥 |
-| LOAD      | 🟧 | BLOCK_HEIGHT          | 🟥 | SHA256    | 🟥 |
-| EXISTS    | 🟧 | BLOCK_TIMESTAMP       | 🟥 | SHA3256   | 🟥 |
-| STORE     | 🟧 | SIGNER                | 🟥 | KECCAK256 | 🟥 |
-| DELETE    | 🟧 | UPDATE_SC_CODE        | 🟥 | HEX       | 🟥 |
+| LOAD      | 🟧 | BLOCK_HEIGHT          | 🟧 | SHA256    | 🟥 |
+| EXISTS    | 🟧 | BLOCK_TIMESTAMP       | 🟧 | SHA3256   | 🟥 |
+| STORE     | 🟧 | SIGNER                | 🟧 | KECCAK256 | 🟥 |
+| DELETE    | 🟧 | UPDATE_SC_CODE        | 🟧 | HEX       | 🟥 |
 | MAPEXISTS | 🟧 | IS_ADDRESS_VALID      | 🟥 | HEXDECODE | 🟥 |
 | MAPGET    | 🟧 | ADDRESS_RAW           | 🟥 | MIN       | 🟥 |
 | MAPSTORE  | 🟧 | ADDRESS_STRING        | 🟥 | MAX       | 🟥 |
