@@ -16,18 +16,7 @@ class MapExists(Function):
     
     def _computeGasStorageCost(self):
         return 0
-    
-    def convert(self, *args, **kwargs):
-        return f'MAPEXISTS("{self.parameters["key"]["value"]}")'
-        
-    def __str__(self):
-        return f'MAPEXISTS("{self.parameters["key"]["value"]}")'
             
         
 def map_exists(key: str):
     return MapExists()(key=key)
-
-def map_exists_dero(key: str):
-    e =  MapExists()
-    e(key=key)
-    return e.convert(key=key)

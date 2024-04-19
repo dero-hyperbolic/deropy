@@ -16,18 +16,7 @@ class Delete(Function):
     
     def _computeGasStorageCost(self):
         return 0
-    
-    def convert(self, *args, **kwargs):
-        return f'DELETE("{self.parameters["key"]["value"]}")'
-        
-    def __str__(self):
-        return f'DELETE("{self.parameters["key"]["value"]}")'
             
         
 def delete(key: str):
     return Delete()(key=key)
-
-def delete_dero(key: str):
-    e =  Delete()
-    e(key=key)
-    return e.convert(key=key)

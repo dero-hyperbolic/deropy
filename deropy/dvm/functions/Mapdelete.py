@@ -16,18 +16,8 @@ class MapDelete(Function):
     
     def _computeGasStorageCost(self):
         return 0
-    
-    def convert(self, *args, **kwargs):
-        return f'MAPDELETE("{self.parameters["key"]["value"]}")'
-        
-    def __str__(self):
-        return f'MAPDELETE("{self.parameters["key"]["value"]}")'
+
             
         
 def map_delete(key: str):
     return MapDelete()(key=key)
-
-def map_delete_dero(key: str):
-    e =  MapDelete()
-    e(key=key)
-    return e.convert(key=key)

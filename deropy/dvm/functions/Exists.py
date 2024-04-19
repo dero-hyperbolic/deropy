@@ -16,18 +16,7 @@ class Exists(Function):
     
     def _computeGasStorageCost(self):
         return 0
-    
-    def convert(self, *args, **kwargs):
-        return f'EXISTS("{self.parameters["key"]["value"]}")'
-        
-    def __str__(self):
-        return f'EXISTS("{self.parameters["key"]["value"]}")'
             
         
 def exists(key: str):
     return Exists()(key=key)
-
-def exists_dero(key: str):
-    e =  Exists()
-    e(key=key)
-    return e.convert(key=key)

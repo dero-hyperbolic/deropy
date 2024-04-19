@@ -18,18 +18,7 @@ class Random(Function):
     
     def _computeGasStorageCost(self):
         return 0
-
-    def convert(self, *args, **kwargs):
-        return f'RANDOM({self.parameters["value"]["value"]})'
-        
-    def __str__(self):
-        return f'RETURN({self.parameters["value"]["value"]})'
             
         
 def random(value: str):
     return Random()(value=value)
-
-def random_dero(value: str):
-    r =  Random()
-    r(value=value)
-    return r.convert(value=value)

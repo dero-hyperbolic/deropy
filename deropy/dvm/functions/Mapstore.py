@@ -17,21 +17,5 @@ class MapStore(Function):
     def _computeGasStorageCost(self):
         return 0
 
-    def convert(self):
-        if type(self.parameters["value"]["value"]) == str:
-            return f'MAPSTORE({self.parameters["key"]["value"]}, {self.parameters["value"]["value"]})'
-        elif type(self.parameters["value"]["value"]) == int:
-            return f'MAPSTORE({self.parameters["key"]["value"]}, {self.parameters["value"]["value"]})'
-        else:
-            raise Exception(f'Invalid type {type(self.parameters["value"]["value"])} for argument value provided to function map store')
-        
-    def __str__(self):
-        return self.convert()
-
 def map_store(variable: str, value):
     return MapStore()(key=variable, value=value)
-
-def map_store_dero(variable: str, value):
-    s =  MapStore()
-    s(key=variable, value=value)
-    return s.convert()

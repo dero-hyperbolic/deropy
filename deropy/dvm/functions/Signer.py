@@ -11,17 +11,6 @@ class Signer(Function):
     
     def _computeGasStorageCost(self):
         return 0
-    
-    def convert(self):
-        return "SIGNER()"
-
-    def __str__(self):
-        return self.convert()
 
 def signer():
     return Signer()()
-
-def signer_dero():
-    s =  Signer()
-    s()
-    return s.convert()
