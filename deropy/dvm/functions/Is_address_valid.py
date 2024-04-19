@@ -12,7 +12,8 @@ class IsAddressValid(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters["address"]["value"] = kwargs["address"]
-        return 0
+        is_valid = 0  # FIXME: This is a placeholder value
+        return is_valid
     
 def is_address_valid(address: str):
     return IsAddressValid()(address=address)

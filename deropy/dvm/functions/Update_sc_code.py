@@ -16,7 +16,8 @@ class UpdateScCode(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters["sc_code"]["value"] = kwargs["sc_code"]
-        return self.sc.storage[kwargs["sc_code"]]
+        self.sc.storage["code"] = kwargs["sc_code"]
+        return 0
     
 def update_sc_code(sc_code: str):
     return UpdateScCode()(sc_code=sc_code)
