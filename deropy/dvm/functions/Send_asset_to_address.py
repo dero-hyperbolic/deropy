@@ -7,7 +7,7 @@ class SendAssetToAddress(Function):
             "amount": {"type": "int", "value": None},
             "asset": {"type": "str", "value": None},
         }
-        super().__init__("send_asset_to_address", 70_000, 0, func_parameters)
+        super().__init__("send_asset_to_address", 90_000, 0, func_parameters)
 
     def _computeGasStorageCost(self):
         return len(self.parameters["raw_address"]["value"]) + len(self.parameters["asset"]["value"])
