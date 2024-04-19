@@ -13,4 +13,5 @@ from .Txid import txid
 from .Blid import blid
 from .Dero import dero
 from .Block_height import block_height
-from .Block_timestamp import block_timestamp
+from .Block_timestamp import block_height
+from .Update_sc_code import update_sc_code
