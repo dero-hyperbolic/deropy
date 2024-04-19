@@ -5,7 +5,7 @@ class AddressString(Function):
         func_parameters = {
             "address": {"type": "str", "value": None},
         }
-        super().__init__("address_string", 60_000, 0, func_parameters)
+        super().__init__("address_string", 50_000, 0, func_parameters)
 
     def _computeGasStorageCost(self):
         return len(self.parameters["address"]["value"])
