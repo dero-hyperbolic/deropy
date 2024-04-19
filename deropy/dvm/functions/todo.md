@@ -2,8 +2,9 @@
 - 🟧 Implemented and manually tested
 - 🟩 Implemented and automatically tested
 
-| VERSION   | 🟥 | DERO                  | 🟥 | ITOA      | 🟥 |
+| Function  |     | Function  |     | Function  |     |
 |-----------|----|-----------------------|----|-----------|----|
+| VERSION   | 🟥 | DERO                  | 🟧 | ITOA      | 🟥 |
 | LOAD      | 🟧 | BLOCK_HEIGHT          | 🟥 | SHA256    | 🟥 |
 | EXISTS    | 🟧 | BLOCK_TIMESTAMP       | 🟥 | SHA3256   | 🟥 |
 | STORE     | 🟧 | SIGNER                | 🟥 | KECCAK256 | 🟥 |
