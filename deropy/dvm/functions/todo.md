@@ -13,6 +13,6 @@
 | MAPSTORE  | 🟧 | ADDRESS_STRING        | 🟥 | MAX       | 🟥 |
 | MAPDELETE | 🟧 | SEND_DERO_TO_ADDRESS  | 🟥 | STRLEN    | 🟥 |
 | RANDOM    | 🟧 | SEND_ASSET_TO_ADDRESS | 🟥 | SUBSTR    | 🟥 |
-| SCID      | 🟥 | DEROVALUE             | 🟥 | PANIC     | 🟥 |
+| SCID      | 🟧 | DEROVALUE             | 🟥 | PANIC     | 🟥 |
 | BLID      | 🟥 | ASSETVALUE            | 🟥 |           | 🟥 |
 | TXID      | 🟥 | ATOI                  | 🟥 |           | 🟥 |
