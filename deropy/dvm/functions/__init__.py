@@ -8,3 +8,4 @@ from .Mapget import map_get
 from .Mapstore import map_store
 from .Random import random
 from .Signer import signer
+from .Scid import scid
