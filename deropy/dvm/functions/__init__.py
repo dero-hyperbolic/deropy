@@ -30,3 +30,5 @@ from .keccak256 import keccak256
 from .hex import _hex
 from .Hex_decode import hex_decode
 from .Strlen import strlen
+from .Substr import substr
+from .Panic import panic
