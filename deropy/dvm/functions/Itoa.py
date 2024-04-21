@@ -6,7 +6,7 @@ class Itoa(Function):
         func_parameters = {
             "n": {"type": "int", "value": None},
         }
-        super().__init__("itoa", 10_000, 0, func_parameters)
+        super().__init__("itoa", 5_000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
         self.parameters["n"]["value"] = kwargs["n"]
@@ -18,7 +18,7 @@ class Itoa(Function):
         
     
     def _computeGasStorageCost(self): 
-        return 0   # FIXME: Find a way
+        return 0
 
 def itoa(n: str):
     return Itoa()(n=n)

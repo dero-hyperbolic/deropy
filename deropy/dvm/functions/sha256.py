@@ -1,24 +1,20 @@
 from deropy.dvm.functions.Function import Function
+import hashlib
 
 
-class Atoi(Function):
+class Sha256(Function):
     def __init__(self):
         func_parameters = {
             "s": {"type": "str", "value": None},
         }
-        super().__init__("atoi", 5_000, 0, func_parameters)
+        super().__init__("atoi", 20_000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
         self.parameters["s"]["value"] = kwargs["s"]
-        
-        try:
-            return str(int(kwargs["s"]))
-        except:
-            raise ValueError(f"ATOI({kwargs['s']}) failed")
-        
+        return hashlib.sha256(kwargs["s"].encode()).hexdigest()
     
     def _computeGasStorageCost(self): 
         return 0
 
-def atoi(s: str):
-    return Atoi()(s=s)
+def sha256(s: str):
+    return Sha256()(s=s)
