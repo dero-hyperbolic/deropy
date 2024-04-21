@@ -7,7 +7,7 @@ class Sha256(Function):
         func_parameters = {
             "s": {"type": "str", "value": None},
         }
-        super().__init__("atoi", 25_000, 0, func_parameters)
+        super().__init__("sha256", 25_000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
         self.parameters["s"]["value"] = kwargs["s"]

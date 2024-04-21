@@ -26,3 +26,4 @@ from .Atoi import atoi
 from .Itoa import itoa
 from .sha256 import sha256
 from .sha3256 import sha3256
+from .keccak256 import keccak256

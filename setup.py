@@ -17,6 +17,7 @@ setup(
         'pyperclip==1.8.2',
         'python-dotenv==0.20.0',
         'InquirerPy==0.3.4',
+        'pysha3==1.0.2',
     ],
     include_package_data=True,
     package_data={},
