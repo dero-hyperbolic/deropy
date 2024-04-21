@@ -29,3 +29,4 @@ from .sha3256 import sha3256
 from .keccak256 import keccak256
 from .hex import _hex
 from .Hex_decode import hex_decode
+from .Strlen import strlen
