@@ -24,3 +24,5 @@ from .Dero_value import dero_value
 from .Asset_value import asset_value
 from .Atoi import atoi
 from .Itoa import itoa
+from .sha256 import sha256
+from .sha3256 import sha3256
