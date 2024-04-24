@@ -1,6 +1,59 @@
+from hashlib import sha256
+import functools
+import time
+
+
+def logger(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        sc = SmartContract.get_instance()
+        sc.gasCompute = []
+        sc.gasStorage = []
+
+        print("-" * 120)
+        print("Function: ", func.__name__)
+        value = func(*args, **kwargs)
+        print('----')
+        print('total gas compute: ', sum(sc.gasCompute))
+        print('total gas storage: ', sum(sc.gasStorage))
+
+        if func.__name__ in SmartContract.public_functions:
+            print("BLID: ", SmartContract.blocks[-1])
+            print("TXID: ", SmartContract.transactions[-1]["txid"])
+
+        return value
+    
+    return wrapper
+
+def sc_logger(decorator, cls=None):
+    if cls is None:
+        return lambda cls: sc_logger(decorator, cls)
+    
+    class Decoratable(cls):
+        def __init__(self, *args, **kargs):
+            super().__init__(*args, **kargs)
+
+        def __getattribute__(self, item):
+            value = object.__getattribute__(self, item)
+            if callable(value):
+                # if the function start with a capital letter, it is a public function, and need to be wrapped
+                if value.__name__[0].isupper():
+                    SmartContract.public_functions.append(value.__name__)
+                    return decorator(value)
+            return value
+        
+    return Decoratable
+    
+
 class SmartContract:
+    public_functions = []
     max_compute_gaz = 10_000_000
     max_storage_gas = 20_000
+
+    # Blockchain basic component simulation
+    blocks = []
+    transactions = []
+    scid = sha256(str(time.time()).encode()).hexdigest()
     
     def __new__(cls):
         if not hasattr(cls, 'instance'):
@@ -10,12 +63,43 @@ class SmartContract:
 
     @classmethod
     def get_instance(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(SmartContract, cls).__new__(cls)
+            cls.instance._initialize()
         return cls.instance
 
     def _initialize(self):
         self.storage = dict()
         self.gasStorage = []
         self.gasCompute = []
+
+
+def isPublic(func):
+    # A public method is one called during a transaction, therefore we should create a txid and store into a block
+    def wrapper(*args, **kwargs):
+        sc = SmartContract.get_instance()
+        
+        # Create a transaction id and block id
+        txid = sha256(str(time.time()).encode()).hexdigest()
+        blockid = sha256(str(time.time()).encode()).hexdigest()
+
+        # Store the transaction and the block
+        SmartContract.transactions.append({
+            "txid": txid,
+            "blockid": blockid,
+            "scid": sc.scid,
+            "func": func.__name__,
+            "args": args,
+            "kwargs": kwargs
+        })
+        SmartContract.blocks.append(blockid)
+
+        # Call the function
+        return func(*args, **kwargs)
+    
+    wrapper.is_public = True
+    wrapper.func_name = func.__name__
+    return wrapper 
 
 if __name__ == "__main__":
     sc = SmartContract()

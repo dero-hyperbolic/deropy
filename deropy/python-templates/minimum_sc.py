@@ -1,28 +1,24 @@
-from deropy.dvm.functions import store, load, signer, exists
-from deropy.dvm.Smartcontract import SmartContract
+from deropy.dvm.functions import store, load, signer, exists, update_sc_code
+from deropy.dvm.Smartcontract import SmartContract, logger, isPublic, sc_logger
 
-class Storage:
-    def Initialize() -> int:
+@sc_logger(logger)
+class Storage(SmartContract):
+
+    def Initialize(self) -> int:
         if exists("owner") == 0:
             store("owner", signer())
             store("original_owner", 0)
         else:
             return 1
-    
+        
+    def UpdateSC(self, new_code: str) -> int:
+        if signer() != load("owner"):
+            return 1
+        
+        update_sc_code(new_code)
+        return 0
 
 if __name__ == '__main__':
-    import inspect
-    sc = SmartContract()
-
-    # Initialize the storage
-    cg, sg = [], []
-
-    print('----------------------------')
-    sc.gasCompute, sc.gasStorage = [], []
-    Storage.Initialize()
-    print(sum(sc.gasCompute), sum(sc.gasStorage))
-
-    print('----------------------------')
-    sc.gasCompute, sc.gasStorage = [], []
-    Storage.UpdateCode(inspect.getsource(Storage))
-    print(sum(sc.gasCompute), sum(sc.gasStorage))
+    sc = Storage()
+    sc.Initialize()
+    sc.UpdateSC("new_code")
