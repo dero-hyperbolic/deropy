@@ -12,7 +12,7 @@ class Delete(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters['key']['value'] = kwargs['key']
-        return kwargs['key'] in self.sc.storage
+        del self.sc.storage[kwargs['key']]
     
     def _computeGasStorageCost(self):
         return 0
