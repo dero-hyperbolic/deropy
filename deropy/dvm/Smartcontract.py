@@ -1,6 +1,7 @@
 from hashlib import sha256
 import functools
 import time
+import os
 
 
 def logger(func):
@@ -10,8 +11,8 @@ def logger(func):
         sc.gasCompute = []
         sc.gasStorage = []
 
-        print("-" * 120)
-        print("Function: ", func.__name__)
+        print("-" * os.get_terminal_size().columns)
+        print("Function: ", func.func_name)
         value = func(*args, **kwargs)
         print('----')
         print('total gas compute: ', sum(sc.gasCompute))

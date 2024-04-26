@@ -8,6 +8,7 @@ class Storage(SmartContract):
         if exists("owner") == 0:
             store("owner", signer())
             store("original_owner", 0)
+            return 0
         else:
             return 1
         
