@@ -1,5 +1,5 @@
 from deropy.dvm.functions.Function import Function
-import sha3
+from Crypto.Hash import keccak
 
 
 class Keccak256(Function):
@@ -11,7 +11,9 @@ class Keccak256(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters["s"]["value"] = kwargs["s"]
-        return sha3.keccak_256().update(kwargs["s"].encode()).hexdigest()
+        k = keccak.new(digest_bits=256)
+        k.update(kwargs["s"].encode())
+        return k.hexdigest()
     
     def _computeGasStorageCost(self): 
         return 0
