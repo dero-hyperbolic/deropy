@@ -18,7 +18,6 @@ list_of_tests = {
     # "Blid": [{'args': {}, 'expected': 0}],
     "BlockHeight": [{'args': {}, 'expected': 0}],
     "BlockTimestamp": [{'args': {}, 'expected': 0}],
-    "Delete": [{'args': {'key': 'variable_name'}, 'expected': 0}],
     "DeroValue": [{'args': {}, 'expected': 0}],
     "Dero": [{'args': {}, 'expected': 0}],
     "HexDecode": [{'args': {'s': '0x1234567890abcdef'}, 'expected': 0}],
@@ -32,6 +31,9 @@ list_of_tests = {
     "Load": [
         {'args': {'key': '5char'}, 'expected': 1},
         {'args': {'key': '50char'}, 'expected': 5}],
+    "Delete": [
+        {'args': {'key': '5char'}, 'expected': 0},
+        {'args': {'key': '50char'}, 'expected': 0}],
     "MapExists": [{'args': {'key': 'key'}, 'expected': 0}],
     "MapStore": [{'args': {'key': 'key', 'value': 'n'}, 'expected': 0}],
     "MapGet": [{'args': {'key': 'key'}, 'expected': 0}],
@@ -55,7 +57,6 @@ test_order = [
     # "Blid",
     "BlockHeight",
     "BlockTimestamp",
-    "Delete",
     "DeroValue",
     "Dero",
     "HexDecode",
@@ -65,6 +66,7 @@ test_order = [
     "Keccak256",
     "Store",
     "Load",
+    "Delete",
     "MapExists",
     "MapStore",
     "MapGet",
