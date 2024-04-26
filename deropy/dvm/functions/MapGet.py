@@ -12,7 +12,7 @@ class MapGet(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters["key"]["value"] = kwargs["key"]
-        return self.sc.storage[kwargs["key"]]
+        return self.sc.memory[kwargs["key"]]
     
 def map_get(key: str):
     return MapGet()(key=key)

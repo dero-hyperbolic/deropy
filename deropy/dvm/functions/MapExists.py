@@ -10,7 +10,7 @@ class MapExists(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters['key']['value'] = kwargs['key']
-        return kwargs['key'] in self.sc.storage
+        return kwargs['key'] in self.sc.memory
     
     def _computeGasStorageCost(self):
         return 0

@@ -11,7 +11,7 @@ class MapDelete(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters['key']['value'] = kwargs['key']
-        return kwargs['key'] in self.sc.storage
+        del self.sc.memory[kwargs['key']]
     
     def _computeGasStorageCost(self):
         return 0

@@ -72,6 +72,7 @@ class SmartContract:
 
     def _initialize(self):
         self.storage = dict()
+        self.memory = dict()
         self.gasStorage = []
         self.gasCompute = []
 
