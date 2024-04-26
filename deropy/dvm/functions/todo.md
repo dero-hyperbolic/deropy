@@ -17,4 +17,4 @@
 | 🟩 | RANDOM    | 🟩 | SEND_ASSET_TO_ADDRESS | 🟩 | SUBSTR    | 
 | 🟦 | SCID      | 🟩 | DEROVALUE             | 🟦 | PANIC     | 
 | 🟦 | BLID      | 🟩 | ASSETVALUE            |    |           | 
-| 🟦 | TXID      | 🟩 | ATOI                  |    |           | 
+| 🟦 | TXID      | 🟩 | ATOI                  |    |           |
