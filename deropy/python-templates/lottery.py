@@ -95,6 +95,8 @@ if __name__ == '__main__':
     current_storage = SmartContract.get_instance().storage
     assert current_storage['deposit_count'] == 1
     assert current_storage['deposit_total'] == 1000
+    assert current_storage['depositor_address0']
+    assert current_storage['depositor_address0'] == get_raw_address(original_signer)
 
     # The owner tune the lottery parameters
     sc.TuneLotteryParameters(10, 9000)
@@ -113,7 +115,6 @@ if __name__ == '__main__':
     SmartContract.active_wallet = get_address(original_signer)
     sc.TransferOwnership(get_address(new_owner))
     current_storage = SmartContract.get_instance().storage
-    pprint.pprint(current_storage)
     assert current_storage['tmpowner'] == get_raw_address(new_owner)
 
     # Somebody random try to claim the ownership, it should not work
