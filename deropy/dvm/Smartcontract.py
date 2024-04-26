@@ -17,7 +17,7 @@ def logger(func):
         print('total gas compute: ', sum(sc.gasCompute))
         print('total gas storage: ', sum(sc.gasStorage))
 
-        if func.__name__ in SmartContract.public_functions:
+        if func.is_public:
             print("BLID: ", SmartContract.blocks[-1])
             print("TXID: ", SmartContract.transactions[-1]["txid"])
 
@@ -39,7 +39,9 @@ def sc_logger(decorator, cls=None):
                 # if the function start with a capital letter, it is a public function, and need to be wrapped
                 if value.__name__[0].isupper():
                     SmartContract.public_functions.append(value.__name__)
-                    return decorator(value)
+
+                    # wrap the function with the isPublic decorator
+                    return decorator(isPublic(value))
             return value
         
     return Decoratable
@@ -76,7 +78,7 @@ class SmartContract:
 
 def isPublic(func):
     # A public method is one called during a transaction, therefore we should create a txid and store into a block
-    def wrapper(*args, **kwargs):
+    def public_function(*args, **kwargs):
         sc = SmartContract.get_instance()
         
         # Create a transaction id and block id
@@ -97,9 +99,9 @@ def isPublic(func):
         # Call the function
         return func(*args, **kwargs)
     
-    wrapper.is_public = True
-    wrapper.func_name = func.__name__
-    return wrapper 
+    public_function.is_public = True
+    public_function.func_name = func.__name__
+    return public_function 
 
 if __name__ == "__main__":
     sc = SmartContract()

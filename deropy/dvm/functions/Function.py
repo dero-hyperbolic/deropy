@@ -33,8 +33,11 @@ class Function:
                 except:
                     raise Exception(f"Invalid type [str] for argument [{key}] provided to function [{self.name}], expected [int]")
             
-        msg = [f'{self.name.upper()}({kwargs})']
         value = self._exec(**kwargs)
+
+        # build the message to be printed
+        args = ', '.join([f'{value}' for key, value in kwargs.items()]) if kwargs else ''
+        msg = [f'{self.name.upper()}({args})']
         self.sc.gasCompute.append(self.compute_cost)
         self.sc.gasStorage.append(self._computeGasStorageCost())
         msg += [f'computeGas: {self.compute_cost}', f'storageGas: {self._computeGasStorageCost()}']
