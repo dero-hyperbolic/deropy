@@ -2,6 +2,7 @@ from hashlib import sha256
 import functools
 import time
 
+from deropy.dvm.utils import print_red
 
 def logger(func):
     @functools.wraps(func)
@@ -14,8 +15,14 @@ def logger(func):
         print("Function: ", func.__name__)
         value = func(*args, **kwargs)
         print('----')
-        print('total gas compute: ', sum(sc.gasCompute))
-        print('total gas storage: ', sum(sc.gasStorage))
+        
+
+        if sum(sc.gasCompute) > SmartContract.max_compute_gaz:
+            print_red('total gas compute: ', sum(sc.gasCompute))
+            print_red('total gas storage: ', sum(sc.gasStorage))
+        else:
+            print('total gas compute: ', sum(sc.gasCompute))
+            print('total gas storage: ', sum(sc.gasStorage))
 
         if func.is_public:
             print("BLID: ", SmartContract.blocks[-1])

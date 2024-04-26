@@ -45,6 +45,8 @@ def get_raw_address(id):
 def get_raw_address_from_string(s):
     return s[:33]
         
-    
-
+def print_red(*args):
+    print("\033[91m", end="")
+    print(*args)
+    print("\033[0m", end="")
     
