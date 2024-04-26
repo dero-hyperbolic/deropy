@@ -1,7 +1,7 @@
 from deropy.dvm.functions.Function import Function
 
 
-class StrLen(Function):
+class Strlen(Function):
     def __init__(self):
         func_parameters = {
             "s": {"type": "str", "value": None},
@@ -16,4 +16,4 @@ class StrLen(Function):
         return 0
 
 def strlen(s: str):
-    return StrLen()(s=s)
+    return Strlen()(s=s)

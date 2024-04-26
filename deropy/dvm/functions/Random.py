@@ -12,8 +12,8 @@ class Random(Function):
         super().__init__("random", 2500, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
-        value = rd.randint(0, self.parameters['value']['value'])
         self.parameters['value']['value'] = kwargs['value']
+        value = rd.randint(0, self.parameters['value']['value'])
         return value
     
     def _computeGasStorageCost(self):

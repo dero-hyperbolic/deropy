@@ -11,7 +11,7 @@ class MapGet(Function):
         return 0
 
     def _exec(self, *args, **kwargs):
-        self.parameters["key"] = kwargs["key"]
+        self.parameters["key"]["value"] = kwargs["key"]
         return self.sc.storage[kwargs["key"]]
     
 def map_get(key: str):
