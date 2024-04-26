@@ -1,4 +1,5 @@
 from deropy.dvm.functions.Function import Function
+from deropy.dvm.Smartcontract import SmartContract
 
 
 class Signer(Function):
@@ -7,7 +8,7 @@ class Signer(Function):
         super().__init__("signer", 5_000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
-        return "signer"
+        return SmartContract.active_wallet[:33]
     
     def _computeGasStorageCost(self):
         return 0

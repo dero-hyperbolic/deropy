@@ -16,7 +16,6 @@ class Atoi(Function):
         except:
             raise ValueError(f"ATOI({kwargs['s']}) failed")
         
-    
     def _computeGasStorageCost(self): 
         return 0
 

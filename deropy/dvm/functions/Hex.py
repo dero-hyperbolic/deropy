@@ -10,7 +10,7 @@ class Hex(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters["s"]["value"] = kwargs["s"]
-        return hex(int(kwargs["s"]), 16)
+        return hex(int(kwargs["s"]))
     
     def _computeGasStorageCost(self): 
         return 0

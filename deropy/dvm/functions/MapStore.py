@@ -12,7 +12,7 @@ class MapStore(Function):
     def _exec(self, *args, **kwargs):
         self.parameters["key"]["value"] = kwargs["key"]
         self.parameters["value"]["value"] = kwargs["value"]
-        self.sc.storage[kwargs["key"]] = kwargs["value"]
+        self.sc.memory[kwargs["key"]] = kwargs["value"]
 
     def _computeGasStorageCost(self):
         return 0
