@@ -9,7 +9,7 @@ class Dero(Function):
         func_parameters = {
             'value': {"type": "int", "value": None},
         }
-        super().__init__("dero", 10000, 0, func_parameters)
+        super().__init__("dero", 10_000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
         value = "0000000000000000000000000000000000000000000000000000000000000000"

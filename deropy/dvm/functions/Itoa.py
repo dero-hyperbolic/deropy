@@ -14,7 +14,7 @@ class Itoa(Function):
         try:
             return int(str(kwargs["n"]))
         except:
-            raise ValueError(f"ITPA({kwargs['s']}) failed")
+            raise ValueError(f"ITOA({kwargs['s']}) failed")
         
     
     def _computeGasStorageCost(self): 

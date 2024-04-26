@@ -8,7 +8,7 @@ class Delete(Function):
         func_parameters = {
             'key': {"type": "str", "value": None},
         }
-        super().__init__("delete", 50_000, 0, func_parameters)
+        super().__init__("delete", 3000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
         self.parameters['key']['value'] = kwargs['key']

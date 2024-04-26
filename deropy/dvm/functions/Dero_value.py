@@ -10,7 +10,7 @@ class DeroValue(Function):
         return "dero_value"
     
     def _computeGasStorageCost(self): 
-        return 0   # FIXME: Find a way
+        return 0
 
 def dero_value():
     return DeroValue()()
