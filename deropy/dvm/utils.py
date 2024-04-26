@@ -1,3 +1,6 @@
+import hashlib
+import functools
+
 def type_python_to_intermediate(python_hint):
     return {
         "int": "number",
@@ -32,6 +35,16 @@ def print_interpreter(msg: list):
     
     msg = f'{format_column(msg[0], 80)} {format_column(msg[1], 20)} {format_column(msg[2], 20)}'
     print(msg)
+    
+def get_address(id):
+    return hashlib.sha256(str(id).encode()).hexdigest()
+
+def get_raw_address(id):
+    return get_address(id)[:33]
+
+def get_raw_address_from_string(s):
+    return s[:33]
+        
     
 
     

@@ -48,6 +48,7 @@ def sc_logger(decorator, cls=None):
     
 
 class SmartContract:
+    active_wallet = None
     public_functions = []
     max_compute_gaz = 10_000_000
     max_storage_gas = 20_000

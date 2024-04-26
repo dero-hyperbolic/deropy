@@ -11,7 +11,8 @@ class AddressRaw(Function):
         return 0
 
     def _exec(self, *args, **kwargs):
-        self.parameters["address"]["value"] = kwargs["address"]
+        self.parameters["address"]["value"] = kwargs["address"]\
+        
         return kwargs["address"][:33]  # raw address is 33 bytes long
     
 def address_raw(address: str):
