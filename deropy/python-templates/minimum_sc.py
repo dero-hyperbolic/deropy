@@ -2,7 +2,7 @@ from deropy.dvm.functions import store, load, signer, exists, update_sc_code
 from deropy.dvm.Smartcontract import SmartContract, logger, isPublic, sc_logger
 
 @sc_logger(logger)
-class Storage(SmartContract):
+class Minimal(SmartContract):
 
     def Initialize(self) -> int:
         if exists("owner") == 0:
@@ -19,6 +19,6 @@ class Storage(SmartContract):
         return 0
 
 if __name__ == '__main__':
-    sc = Storage()
+    sc = Minimal()
     sc.Initialize()
     sc.UpdateSC("new_code")

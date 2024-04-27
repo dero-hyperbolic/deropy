@@ -3,7 +3,7 @@ from deropy.dvm.Smartcontract import SmartContract, logger, isPublic, sc_logger
 from deropy.dvm.utils import get_address, get_raw_address
 
 @sc_logger(logger)
-class Storage(SmartContract):
+class NameService(SmartContract):
 
     def Initialize(self) -> int:
         return 0
@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
     # configure the test scenario
     SmartContract.active_wallet = get_address(original_signer)
-    sc = Storage()
+    sc = NameService()
 
     # Initialize the smart contract (akin to deployement on the blockchain)
     sc.Initialize()
