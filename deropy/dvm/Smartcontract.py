@@ -4,56 +4,6 @@ import time
 
 from deropy.dvm.utils import print_red
 
-def logger(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        sc = SmartContract.get_instance()
-        sc.gasCompute = []
-        sc.gasStorage = []
-
-        print("-" * 120)
-        print("Function: ", func.__name__)
-        value = func(*args, **kwargs)
-        print('----')
-        
-
-        if sum(sc.gasCompute) > SmartContract.max_compute_gaz:
-            print_red('total gas compute: ', sum(sc.gasCompute))
-            print_red('total gas storage: ', sum(sc.gasStorage))
-        else:
-            print('total gas compute: ', sum(sc.gasCompute))
-            print('total gas storage: ', sum(sc.gasStorage))
-
-        if func.is_public:
-            print("BLID: ", SmartContract.blocks[-1])
-            print("TXID: ", SmartContract.transactions[-1]["txid"])
-
-        return value
-    
-    return wrapper
-
-def sc_logger(decorator, cls=None):
-    if cls is None:
-        return lambda cls: sc_logger(decorator, cls)
-    
-    class Decoratable(cls):
-        def __init__(self, *args, **kargs):
-            super().__init__(*args, **kargs)
-
-        def __getattribute__(self, item):
-            value = object.__getattribute__(self, item)
-            if callable(value):
-                # if the function start with a capital letter, it is a public function, and need to be wrapped
-                if value.__name__[0].isupper():
-                    SmartContract.public_functions.append(value.__name__)
-
-                    # wrap the function with the isPublic decorator
-                    return decorator(isPublic(value))
-            return value
-        
-    return Decoratable
-    
-
 class SmartContract:
     active_wallet = None
     public_functions = []
@@ -111,6 +61,57 @@ def isPublic(func):
     public_function.is_public = True
     public_function.func_name = func.__name__
     return public_function 
+
+
+def logger(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        sc = SmartContract.get_instance()
+        sc.gasCompute = []
+        sc.gasStorage = []
+
+        print("-" * 120)
+        print("Function: ", func.__name__)
+        value = func(*args, **kwargs)
+        print('----')
+        
+
+        if sum(sc.gasCompute) > SmartContract.max_compute_gaz:
+            print_red('total gas compute: ', sum(sc.gasCompute))
+            print_red('total gas storage: ', sum(sc.gasStorage))
+        else:
+            print('total gas compute: ', sum(sc.gasCompute))
+            print('total gas storage: ', sum(sc.gasStorage))
+
+        if func.is_public:
+            print("BLID: ", SmartContract.blocks[-1])
+            print("TXID: ", SmartContract.transactions[-1]["txid"])
+
+        return value
+    
+    return wrapper
+
+def sc_logger(decorator, cls=None):
+    if cls is None:
+        return lambda cls: sc_logger(decorator, cls)
+    
+    class Decoratable(cls):
+        def __init__(self, *args, **kargs):
+            super().__init__(*args, **kargs)
+
+        def __getattribute__(self, item):
+            value = object.__getattribute__(self, item)
+            if callable(value):
+                # if the function start with a capital letter, it is a public function, and need to be wrapped
+                if value.__name__[0].isupper():
+                    SmartContract.public_functions.append(value.__name__)
+
+                    # wrap the function with the isPublic decorator
+                    return decorator(isPublic(value))
+            return value
+        
+    return Decoratable
+    
 
 if __name__ == "__main__":
     sc = SmartContract()
