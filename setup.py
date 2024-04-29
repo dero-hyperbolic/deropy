@@ -12,7 +12,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         'click==8.0.4',
-        'requests==2.27.1',
+        'requests==2.31.0',
         'coloredlogs==15.0.1',
         'pyperclip==1.8.2',
         'python-dotenv==0.20.0',
