@@ -1,5 +1,6 @@
 from deropy.dvm.functions.Function import Function
 
+
 class SendAssetToAddress(Function):
     def __init__(self):
         func_parameters = {
@@ -17,6 +18,8 @@ class SendAssetToAddress(Function):
         self.parameters["amount"]["value"] = kwargs["amount"]
         self.parameters["asset"]["value"] = kwargs["asset"]
         return 0
-    
+
+
 def send_asset_to_address(raw_address: str, amount: int, asset: str):
     return SendAssetToAddress()(raw_address=raw_address, amount=amount, asset=asset)
+

@@ -1,7 +1,7 @@
 import datetime
-import random as rd
 
 from deropy.dvm.functions.Function import Function
+
 
 class BlockTimestamp(Function):
     def __init__(self):
@@ -11,9 +11,10 @@ class BlockTimestamp(Function):
     def _exec(self, *args, **kwargs):
         block_height = int(datetime.datetime.now().timestamp()) % 18
         return block_height
-    
+
     def _computeGasStorageCost(self):
         return 0
-        
+
+
 def block_timestamp():
     return BlockTimestamp()()

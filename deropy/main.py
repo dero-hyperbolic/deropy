@@ -10,6 +10,7 @@ from deropy.commands.deploy import deploy
 def deropy():
     pass
 
+
 deropy.add_command(generate)
 deropy.add_command(deploy)
 deropy.add_command(configure)

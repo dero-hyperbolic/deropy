@@ -1,5 +1,6 @@
 from deropy.dvm.functions.Function import Function
 
+
 class Store(Function):
     def __init__(self):
         func_parameters = {
@@ -18,6 +19,7 @@ class Store(Function):
             return 8
         else:
             return len(self.parameters["value"]["value"])
+
 
 def store(variable: str, value):
     return Store()(key=variable, value=value)

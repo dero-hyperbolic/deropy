@@ -12,9 +12,10 @@ class Sha256(Function):
     def _exec(self, *args, **kwargs):
         self.parameters["s"]["value"] = kwargs["s"]
         return hashlib.sha256(kwargs["s"].encode()).hexdigest()
-    
-    def _computeGasStorageCost(self): 
+
+    def _computeGasStorageCost(self):
         return 0
+
 
 def sha256(s: str):
     return Sha256()(s=s)

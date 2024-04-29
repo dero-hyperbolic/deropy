@@ -4,6 +4,7 @@ import time
 
 from deropy.dvm.utils import print_red
 
+
 class SmartContract:
     scid = None
     active_wallet = None
@@ -17,7 +18,7 @@ class SmartContract:
     blocks = []
     transactions = []
     scid = sha256(str(time.time()).encode()).hexdigest()
-    
+
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(SmartContract, cls).__new__(cls)
@@ -25,7 +26,7 @@ class SmartContract:
 
         if SmartContract.scid is None:
             SmartContract.scid = sha256(str(time.time()*2).encode()).hexdigest()
-            
+
         return cls.instance
 
     @classmethod
@@ -53,16 +54,15 @@ class SmartContract:
     def send_asset_with_tx(amount, asset_id):
         if SmartContract.asset_value is None:
             SmartContract.asset_value = {}
-        
-        SmartContract.asset_value[asset_id] = amount
 
+        SmartContract.asset_value[asset_id] = amount
 
 
 def isPublic(func):
     # A public method is one called during a transaction, therefore we should create a txid and store into a block
     def public_function(*args, **kwargs):
         sc = SmartContract.get_instance()
-        
+
         # Create a transaction id and block id
         txid = sha256(str(time.time()).encode()).hexdigest()
         blockid = sha256(str(time.time()).encode()).hexdigest()
@@ -80,10 +80,10 @@ def isPublic(func):
 
         # Call the function
         return func(*args, **kwargs)
-    
+
     public_function.is_public = True
     public_function.func_name = func.__name__
-    return public_function 
+    return public_function
 
 
 def logger(func):
@@ -97,7 +97,6 @@ def logger(func):
         print("Function: ", func.__name__)
         value = func(*args, **kwargs)
         print('----')
-        
 
         if sum(sc.gasCompute) > SmartContract.max_compute_gaz:
             print_red('total gas compute: ', sum(sc.gasCompute))
@@ -111,13 +110,14 @@ def logger(func):
             print("TXID: ", SmartContract.transactions[-1]["txid"])
 
         return value
-    
+
     return wrapper
+
 
 def sc_logger(decorator, cls=None):
     if cls is None:
         return lambda cls: sc_logger(decorator, cls)
-    
+
     class Decoratable(cls):
         def __init__(self, *args, **kargs):
             super().__init__(*args, **kargs)
@@ -132,9 +132,9 @@ def sc_logger(decorator, cls=None):
                     # wrap the function with the isPublic decorator
                     return decorator(isPublic(value))
             return value
-        
+
     return Decoratable
-    
+
 
 if __name__ == "__main__":
     sc = SmartContract()

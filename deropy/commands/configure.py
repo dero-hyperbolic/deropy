@@ -2,12 +2,15 @@ import os
 import click
 import logging
 
+
 @click.command('configure')
 def configure():
     _install_autocomplete()
 
+
 def _configure():
     _install_autocomplete()
+
 
 def _install_autocomplete():
     os.makedirs(os.path.join(os.path.expanduser('~'), '.deropy'), exist_ok=True)
@@ -35,6 +38,7 @@ def _install_autocomplete():
 
         os.system(f'_DEROPY_COMPLETE=zsh_source deropy > {cmd_str}')
         os.system(f'echo ". {cmd_str}" >> ~/.zshrc')
+
 
 def _check_exist_in_file(sentence: str, filepath: str):
     with open(filepath, 'r') as file:

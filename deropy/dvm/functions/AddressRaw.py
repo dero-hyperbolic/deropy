@@ -23,6 +23,7 @@ class AddressRaw(Function):
         self.parameters["address"]["value"] = address        
         wallet_id = WalletSimulator.find_wallet_id_from_string(address)
         return WalletSimulator.wallets[wallet_id].raw_address
-    
+
+
 def address_raw(address: str):
     return AddressRaw()(address=address)

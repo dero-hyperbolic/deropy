@@ -14,10 +14,10 @@ class Random(Function):
         self.parameters['value']['value'] = kwargs['value']
         value = rd.randint(0, self.parameters['value']['value'])
         return value
-    
+
     def _computeGasStorageCost(self):
         return 0
-            
-        
+
+
 def random(value: str):
     return Random()(value=value)

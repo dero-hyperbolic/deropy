@@ -13,9 +13,10 @@ class DeroValue(Function):
         if SmartContract.dero_value < 0:
             return 0
         return SmartContract.dero_value
-    
-    def _computeGasStorageCost(self): 
+
+    def _computeGasStorageCost(self):
         return 0
+
 
 def dero_value():
     return DeroValue()()

@@ -1,5 +1,6 @@
 from deropy.dvm.functions.Function import Function
 
+
 class SendDeroToAddress(Function):
     def __init__(self):
         func_parameters = {
@@ -15,6 +16,7 @@ class SendDeroToAddress(Function):
         self.parameters["raw_address"]["value"] = kwargs["raw_address"]
         self.parameters["amount"]["value"] = kwargs["amount"]
         return 0
-    
+
+
 def send_dero_to_address(raw_address: str, amount: int):
     return SendDeroToAddress()(raw_address=raw_address, amount=amount)

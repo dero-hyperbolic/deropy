@@ -19,9 +19,10 @@ class AssetValue(Function):
 
         self.parameters["asset"]["value"] = asset_id
         return SmartContract.asset_value[asset_id]
-        
+
     def _computeGasStorageCost(self): 
         return 0
+
 
 def asset_value(asset: str):
     return AssetValue()(asset=asset)

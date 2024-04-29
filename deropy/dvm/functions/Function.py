@@ -1,6 +1,7 @@
 from deropy.dvm.Smartcontract import SmartContract
 from deropy.dvm.utils import print_interpreter
 
+
 class Function:
     def __init__(self, name, compute_cost, storage_cost, parameters: dict):
         self.sc = SmartContract.get_instance()
@@ -11,26 +12,27 @@ class Function:
 
     def __str__(self):
         return self.name.upper()
-    
+
     def _computeGasStorageCost(self):
         raise NotImplementedError
-    
+
     def __call__(self, **kwargs):
         # Check if the argument provided in kwargs are identical to the parameters of the function
         for key, value in kwargs.items():
             if key not in self.parameters.keys():
                 raise Exception(f"Invalid argument [{key}] provided to function {self.name}")
-            
+
             if self.parameters[key]["type"] == "Any":
                 continue
-            
+
             # Check the parameters, since we are parsing the arguments as strings we need to convert them to the correct type
             if self.parameters[key]["type"] == "int":
                 try:
                     kwargs[key] = int(value)
-                except:
-                    raise Exception(f"Invalid type [str] for argument [{key}] provided to function [{self.name}], expected [int]")
-            
+                except Exception:
+                    raise Exception(
+                        f"Invalid type [str] for argument [{key}] provided to function [{self.name}], expected [int]")
+
         value = self._exec(**kwargs)
 
         # build the message to be printed

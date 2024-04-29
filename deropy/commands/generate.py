@@ -1,6 +1,6 @@
 import click
-import json
 import os
+
 
 @click.command('generate')
 @click.argument('file', type=click.Path())
@@ -29,8 +29,9 @@ def _generate_tests(file):
 
     os.makedirs('tests', exist_ok=True)
     with open('tests/test_SC.py', 'w') as f:
-        for l in lines:
-            f.write(f'{l}\n')
+        for line in lines:
+            f.write(f'{line}\n')
+
 
 def _generate_test_method(f_name, p):
     lines = [f'\n    def test_{_camelCase_to_snake_case(f_name)}(self):']
@@ -71,9 +72,6 @@ def _generate_test_method(f_name, p):
     lines += ['        # ---- Your test here']
     lines += ['        self.assertEqual(1, 1)']
 
-
-
-
     return lines
 
 
@@ -97,32 +95,34 @@ def _generate_class(file: str, scid: str):
         lines.extend(transfer2_method)
 
     with open('SC.py', 'w') as f:
-        for l in lines:
-            f.write(f'{l}\n')
+        for line in lines:
+            f.write(f'{line}\n')
+
 
 def _read_bas(path: str) -> str:
     with open(path, 'r') as f:
         return f.readlines()
-    
+
+
 def _parse_function(lines: list) -> dict:
     def get_function_name(line: str) -> str:
         return line[9:].split('(')[0]
-    
+
     def get_function_parameters(line: str) -> list:
         output = dict()
         parameters = line[9:].split('(')[1].split(')')[0].split(',')
         if len(parameters) == 1 and parameters[0] == '':
             return output
-        
+
         for p in parameters:
             p = p.strip()
             output[p.split()[0]] = p.split()[1]
-        
+
         return output
 
     functions = {}
     for line in lines:
-        if "Function " in line and not "End Function" in line:
+        if "Function " in line and "End Function" not in line:
             function_name = get_function_name(line)
 
             if not function_name[0].isupper():
@@ -133,24 +133,26 @@ def _parse_function(lines: list) -> dict:
 
     return functions
 
+
 def _generate_read_method(scid):
-        return [
-            '    def read(self):',
-            '        url = "http://127.0.0.1:20000/json_rpc"',
-            '        payload = {',
-            '            "jsonrpc": "2.0",',
-            '            "id": "1",',
-            '            "method": "DERO.GetSC",',
-            '            "params": {',
-            f'                "scid": "{scid}",',
-            '                "code": True,',
-            '                "variables": True',
-            '            }',
-            '        }',
-            '        response = requests.post(url, data=json.dumps(payload), headers=self.headers)',
-            '        print(response.json())',
-            '        return response.json()'
-        ]
+    return [
+        '    def read(self):',
+        '        url = "http://127.0.0.1:20000/json_rpc"',
+        '        payload = {',
+        '            "jsonrpc": "2.0",',
+        '            "id": "1",',
+        '            "method": "DERO.GetSC",',
+        '            "params": {',
+        f'                "scid": "{scid}",',
+        '                "code": True,',
+        '                "variables": True',
+        '            }',
+        '        }',
+        '        response = requests.post(url, data=json.dumps(payload), headers=self.headers)',
+        '        print(response.json())',
+        '        return response.json()'
+    ]
+
 
 def _generate_method_scinvoce(f_name, p):
     # create the method definition
@@ -165,21 +167,21 @@ def _generate_method_scinvoce(f_name, p):
         lines = [f'\n    def {_camelCase_to_snake_case(f_name)}(self, {method_parameters}):']
 
     scrpc = [
-        f'                    "sc_rpc": [',
+        '                    "sc_rpc": [',
         '                        {',
-        f'                            "name": "entrypoint",',
-        f'                            "datatype": "S",',
+        '                            "name": "entrypoint",',
+        '                            "datatype": "S",',
         f'                            "value": "{f_name}"',
         '                        },',
     ]
 
     for k, v in p.items():
         scrpc += [
-             '                        {',
+            '                        {',
             f'                            "name": "{k}",',
             f'                            "datatype": "{_SC_type_to_jsonrpc(v)}",',
             f'                            "value": {k}',
-             '                        },',
+            '                        },',
         ]
 
     payload = [
@@ -198,9 +200,10 @@ def _generate_method_scinvoce(f_name, p):
         '            }',
     ]
     lines.extend(payload)
-    lines += [f'        response = requests.post(self.url, data=json.dumps(payload), headers=self.headers)']
-    lines += [f'        print(response.json())']
+    lines += ['        response = requests.post(self.url, data=json.dumps(payload), headers=self.headers)']
+    lines += ['        print(response.json())']
     return lines
+
 
 def _generate_method_transfer2(f_name, p):
     # create the method definition
@@ -215,21 +218,21 @@ def _generate_method_transfer2(f_name, p):
         lines = [f'\n    def {_camelCase_to_snake_case(f_name)}_fee(self, fee: int, {method_parameters}):']
 
     scrpc = [
-        f'                    "sc_rpc": [',
+        '                    "sc_rpc": [',
         '                        {',
-        f'                            "name": "entrypoint",',
-        f'                            "datatype": "S",',
+        '                            "name": "entrypoint",',
+        '                            "datatype": "S",',
         f'                            "value": "{f_name}"',
         '                        },',
     ]
 
     for k, v in p.items():
         scrpc += [
-             '                        {',
+            '                        {',
             f'                            "name": "{k}",',
             f'                            "datatype": "{_SC_type_to_jsonrpc(v)}",',
             f'                            "value": {k}',
-             '                        },',
+            '                        },',
         ]
 
     payload = [
@@ -249,25 +252,28 @@ def _generate_method_transfer2(f_name, p):
         '            }',
     ]
     lines.extend(payload)
-    lines += [f'        response = requests.post(self.url, data=json.dumps(payload), headers=self.headers)']
-    lines += [f'        print(response.json())']
+    lines += ['        response = requests.post(self.url, data=json.dumps(payload), headers=self.headers)']
+    lines += ['        print(response.json())']
     return lines
+
 
 def _SC_type_to_python_type(t: str):
     if t == 'String':
         return 'str'
-    
+
     if t == 'Uint64':
         return 'int'
     raise RuntimeError(f'type [{t}] do not exist in DERO')
 
+
 def _SC_type_to_python_fake(t: str):
     if t == 'String':
         return '"string"'
-    
+
     if t == 'Uint64':
         return '1'
     raise RuntimeError(f'type [{t}] do not exist in DERO')
+
 
 def _SC_type_to_jsonrpc(t: str):
     if t == "String":
@@ -276,6 +282,6 @@ def _SC_type_to_jsonrpc(t: str):
         return "U"
     raise RuntimeError(f'type {t} do not exist in DERO')
 
+
 def _camelCase_to_snake_case(name: str) -> str:
     return ''.join(['_' + i.lower() if i.isupper() else i for i in name]).lstrip('_')
-    

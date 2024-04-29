@@ -12,10 +12,10 @@ class Dero(Function):
         value = "0000000000000000000000000000000000000000000000000000000000000000"
         self.parameters['value']['value'] = value
         return value
-    
+
     def _computeGasStorageCost(self):
         return 0
-            
-        
+
+
 def dero():
     return Dero()()

@@ -13,10 +13,10 @@ class Scid(Function):
         value = SmartContract.scid
         self.parameters['value']['value'] = value
         return value
-    
+
     def _computeGasStorageCost(self):
         return 0
-            
-        
+
+
 def scid():
     return Scid()()

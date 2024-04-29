@@ -11,9 +11,10 @@ class HexDecode(Function):
     def _exec(self, *args, **kwargs):
         self.parameters["s"]["value"] = kwargs["s"]
         return int(kwargs["s"], 16)
-    
-    def _computeGasStorageCost(self): 
+
+    def _computeGasStorageCost(self):
         return 0
+
 
 def hex_decode(s: str):
     return HexDecode()(s=s)

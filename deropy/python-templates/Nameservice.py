@@ -1,6 +1,6 @@
 from deropy.dvm.functions import exists, store, load, strlen, signer, address_raw
 from deropy.dvm.Smartcontract import SmartContract, logger, sc_logger
-from deropy.dvm.utils import get_address, get_raw_address
+
 
 @sc_logger(logger)
 class NameService(SmartContract):
@@ -11,18 +11,18 @@ class NameService(SmartContract):
     def Register(self, name: str) -> int:
         if exists(name):
             return 0
-        
+
         if strlen(name) >= 6:
             store(name, signer())
             return 0
-        
+
         if signer() != address_raw("deto1qyvyeyzrcm2fzf6kyq7egkes2ufgny5xn77y6typhfx9s7w3mvyd5qqynr5hx"):
             return 0
-    
+
     def TransferOwnership(self, name: str, new_owner: str) -> int:
         if load(name) != signer():
             return 1
-        
+
         store(name, address_raw(new_owner))
         return 0
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
     # Initialize the smart contract (akin to deployement on the blockchain)
     sc.Initialize()
-    
+
     # Test the Register function
     assert sc.Register("test") == 0
     assert "test" not in SmartContract.get_instance().storage
@@ -64,4 +64,3 @@ if __name__ == '__main__':
     WalletSimulator.active_wallet = 'hyperbolic'
     sc.TransferOwnership("hyperbolic", WalletSimulator.get_string_address_from_id('new_owner'))
     assert SmartContract.get_instance().storage["hyperbolic"] == WalletSimulator.get_raw_address_from_id('new_owner')
-    

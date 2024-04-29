@@ -14,13 +14,14 @@ class Substr(Function):
         self.parameters["s"]["value"] = kwargs["s"]
         self.parameters["offset"]["value"] = kwargs["offset"]
         self.parameters["lenght"]["value"] = kwargs["lenght"]
-        
+
         start_position = kwargs["offset"]
         end_position = start_position + kwargs["lenght"]
         return len(kwargs["s"][start_position:end_position])
-    
-    def _computeGasStorageCost(self): 
+
+    def _computeGasStorageCost(self):
         return 0
+
 
 def substr(s: str, offset: int, lenght: int):
     return Substr()(s=s, offset=offset, lenght=lenght)
