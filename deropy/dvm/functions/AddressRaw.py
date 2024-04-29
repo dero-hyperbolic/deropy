@@ -20,7 +20,7 @@ class AddressRaw(Function):
         if WalletSimulator.active_wallet is None:
             raise Exception("No active wallet")
 
-        self.parameters["address"]["value"] = address        
+        self.parameters["address"]["value"] = address
         wallet_id = WalletSimulator.find_wallet_id_from_string(address)
         return WalletSimulator.wallets[wallet_id].raw_address
 

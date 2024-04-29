@@ -1,8 +1,8 @@
-import importlib
 import pytest
 
 from deropy.dvm.functions import store, load, exists, delete
 from deropy.dvm.Smartcontract import SmartContract
+
 
 class TestMapStore:
     def test_store_string(self):
@@ -53,8 +53,9 @@ class TestMapDelete:
         with pytest.raises(KeyError):
             load('key')
 
+
 class TestMapExists:
     def test_exists(self):
         store('key', 'value')
 
-        assert exists('key') == True
+        assert exists('key') is True

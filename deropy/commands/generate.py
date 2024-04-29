@@ -35,7 +35,7 @@ def _generate_tests(file):
 
 def _generate_test_method(f_name, p):
     lines = [f'\n    def test_{_camelCase_to_snake_case(f_name)}(self):']
-    
+
     # Create a parameter map
     if len(p) != 0:
         lines += ['        params = {']

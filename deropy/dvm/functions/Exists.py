@@ -11,10 +11,10 @@ class Exists(Function):
     def _exec(self, *args, **kwargs):
         self.parameters['key']['value'] = kwargs['key']
         return kwargs['key'] in self.sc.storage
-    
+
     def _computeGasStorageCost(self):
         return 0
-            
-        
+
+
 def exists(key: str):
     return Exists()(key=key)

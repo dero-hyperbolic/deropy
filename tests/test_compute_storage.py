@@ -1,4 +1,3 @@
-import os
 import importlib
 import pytest
 
@@ -48,7 +47,11 @@ list_of_tests = {
     "Random": [{'args': {'value': 10}, 'expected': 0}],
     "UpdateScCode": [{'args': {'sc_code': 'this is the new code'}, 'expected': 20*2}],
     "SendDeroToAddress": [{'args': {'raw_address': '0x1234567890abcdef', 'amount': 100}, 'expected': 18}],
-    "SendAssetToAddress": [{'args': {'raw_address': '0x1234567890abcdef', 'asset': '0x1234567890abcdef', 'amount': 100}, 'expected': 18*2}],
+    "SendAssetToAddress": [{'args': {
+            'raw_address': '0x1234567890abcdef',
+            'asset': '0x1234567890abcdef',
+            'amount': 100},
+        'expected': 18*2}],
     "Signer": [{'args': {}, 'expected': 0}],
     "Sha256": [{'args': {'s': '0x1234567890abcdef'}, 'expected': 0}],
     "Sha3256": [{'args': {'s': '0x1234567890abcdef'}, 'expected': 0}],
@@ -90,6 +93,8 @@ test_order = [
 ]
 
 # For each file, create a test case
+
+
 @pytest.mark.parametrize('file', test_order)
 def test_functions(file):
     module = importlib.import_module(f'deropy.dvm.functions.{file}')

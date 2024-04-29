@@ -17,7 +17,7 @@ class AddressString(Function):
             raise Exception("Wallet simulator not initialized")
 
         address = self.parameters["address"]["value"] = kwargs["address"]
-        self.parameters["address"]["value"] = address        
+        self.parameters["address"]["value"] = address
         wallet_id = WalletSimulator.find_wallet_id_from_raw(address)
 
         return WalletSimulator.wallets[wallet_id].string_address

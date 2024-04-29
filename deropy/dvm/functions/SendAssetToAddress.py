@@ -22,4 +22,3 @@ class SendAssetToAddress(Function):
 
 def send_asset_to_address(raw_address: str, amount: int, asset: str):
     return SendAssetToAddress()(raw_address=raw_address, amount=amount, asset=asset)
-
