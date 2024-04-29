@@ -39,6 +39,10 @@ class SmartContract:
         self.gasStorage = []
         self.gasCompute = []
 
+        # At first instanciaion, create the smart-contract Id
+        if SmartContract.scid is None:
+            SmartContract.scid = sha256(str(time.time()*2).encode()).hexdigest()
+
 
 def isPublic(func):
     # A public method is one called during a transaction, therefore we should create a txid and store into a block
