@@ -20,9 +20,6 @@ class SmartContract:
         if not hasattr(cls, 'instance'):
             cls.instance = super(SmartContract, cls).__new__(cls)
             cls.instance._initialize()
-
-        if SmartContract.scid is None:
-            SmartContract.scid = sha256(str(time.time()*2).encode()).hexdigest()
             
         return cls.instance
 
@@ -38,10 +35,22 @@ class SmartContract:
         self.memory = dict()
         self.gasStorage = []
         self.gasCompute = []
+        self.dero_value = None
+        self.assset_value = None
 
         # At first instanciaion, create the smart-contract Id
         if SmartContract.scid is None:
             SmartContract.scid = sha256(str(time.time()*2).encode()).hexdigest()
+
+    def send_dero_with_tx(self, amount):
+        self.dero_value = amount
+
+    def send_asset_with_tx(self, amount, asset_id):
+        if self.asset_value is None:
+            self.asset_value = {}
+        
+        self.asset_value[asset_id] = amount
+
 
 
 def isPublic(func):

@@ -10,7 +10,8 @@ class AssetValue(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters["asset"]["value"] = kwargs["asset"]
-        return 0  # FIXME: This is a placeholder value
+        return self.sc.asset_value[kwargs["asset"]]
+        return 0
         
     def _computeGasStorageCost(self): 
         return 0
