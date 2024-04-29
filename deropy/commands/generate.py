@@ -9,11 +9,6 @@ def generate(file, scid):
     _generate_class(file, scid)
     _generate_tests(file)
 
-# def generate_tests(functions):
-#     file_content = _read_bas(file)
-#     functions = _parse_function(file_content)
-
-#     os.mak
 
 def _generate_tests(file):
     file_content = _read_bas(file)
@@ -156,7 +151,6 @@ def _generate_read_method(scid):
             '        print(response.json())',
             '        return response.json()'
         ]
-        return lines
 
 def _generate_method_scinvoce(f_name, p):
     # create the method definition
