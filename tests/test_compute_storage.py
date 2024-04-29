@@ -2,13 +2,20 @@ import os
 import importlib
 import pytest
 
+from deropy.dvm.Wallet import WalletSimulator
+
+# basic initialization
+WalletSimulator.create_wallet('hyperbolic')
+WalletSimulator.active_wallet = 'hyperbolic'
+
+
 list_of_tests = {
     "AddressRaw": [
-        {'args': {'address': '0x1234567890abcdef'}, 'expected': 0},
-        {'args': {'address': '0x'}, 'expected': 0}],
+        {'args': {'address': WalletSimulator.get_string_address_from_id('hyperbolic')}, 'expected': 0},
+        {'args': {'address': WalletSimulator.get_string_address_from_id('hyperbolic')}, 'expected': 0}],
     "AddressString": [
-        {'args': {'address': '0x1234567890abcdef'}, 'expected': 0},
-        {'args': {'address': '0x'}, 'expected': 0}],
+        {'args': {'address': WalletSimulator.get_raw_address_from_id('hyperbolic')}, 'expected': 0},
+        {'args': {'address': WalletSimulator.get_raw_address_from_id('hyperbolic')}, 'expected': 0}],
     "AssetValue": [
         {'args': {'asset': '0x1234567890abcdef'}, 'expected': 0},
         {'args': {'asset': '0x'}, 'expected': 0}],

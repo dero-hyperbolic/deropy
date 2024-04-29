@@ -17,9 +17,9 @@ class AddressString(Function):
 
         address = self.parameters["address"]["value"] = kwargs["address"]
         self.parameters["address"]["value"] = address        
-        wallet_id = WalletSimulator.find_wallet_id_from_string(address)
+        wallet_id = WalletSimulator.find_wallet_id_from_raw(address)
         
-        return WalletSimulator.wallets[wallet_id].raw_address
+        return WalletSimulator.wallets[wallet_id].string_address
     
 def address_string(address: str):
     return AddressString()(address=address)
