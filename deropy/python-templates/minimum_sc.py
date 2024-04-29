@@ -1,5 +1,6 @@
 from deropy.dvm.functions import store, load, signer, exists, update_sc_code
 from deropy.dvm.Smartcontract import SmartContract, logger, sc_logger
+from deropy.dvm.Wallet import WalletSimulator
 
 
 @sc_logger(logger)
@@ -21,6 +22,9 @@ class Minimal(SmartContract):
 
 
 if __name__ == '__main__':
+    WalletSimulator.create_wallet('hyperbolic')
+    WalletSimulator.active_wallet = 'hyperbolic'
+
     sc = Minimal()
     sc.Initialize()
     sc.UpdateSC("new_code")
