@@ -13,14 +13,16 @@ class AddressRaw(Function):
         return 0
 
     def _exec(self, *args, **kwargs):
+        address = self.parameters["address"]["value"] = kwargs["address"]
+
         if not WalletSimulator.is_initialized():
             raise Exception("Wallet simulator not initialized")
+        if WalletSimulator.active_wallet is None:
+            raise Exception("No active wallet")
 
-        address = self.parameters["address"]["value"] = kwargs["address"]
         self.parameters["address"]["value"] = address        
-        wallet_id = WalletSimulator.find_wallet_id_from_raw(address)
-
-        return WalletSimulator.wallets[wallet_id].string_address
+        wallet_id = WalletSimulator.find_wallet_id_from_string(address)
+        return WalletSimulator.wallets[wallet_id].raw_address
     
 def address_raw(address: str):
     return AddressRaw()(address=address)
