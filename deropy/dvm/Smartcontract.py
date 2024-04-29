@@ -20,6 +20,9 @@ class SmartContract:
         if not hasattr(cls, 'instance'):
             cls.instance = super(SmartContract, cls).__new__(cls)
             cls.instance._initialize()
+
+        if SmartContract.scid is None:
+            SmartContract.scid = sha256(str(time.time()*2).encode()).hexdigest()
             
         return cls.instance
 
