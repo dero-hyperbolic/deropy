@@ -1,4 +1,5 @@
 from deropy.dvm.functions.Function import Function
+from deropy.dvm.Smartcontract import SmartContract
 
 
 class DeroValue(Function):
@@ -7,7 +8,11 @@ class DeroValue(Function):
         super().__init__("dero_value", 10_000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
-        return self.sc.dero_value
+        if SmartContract.dero_value is None:
+            return 0
+        if SmartContract.dero_value < 0:
+            return 0
+        return SmartContract.dero_value
     
     def _computeGasStorageCost(self): 
         return 0

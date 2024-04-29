@@ -10,6 +10,8 @@ class SmartContract:
     public_functions = []
     max_compute_gaz = 10_000_000
     max_storage_gas = 20_000
+    dero_value = None
+    asset_value = None
 
     # Blockchain basic component simulation
     blocks = []
@@ -38,21 +40,21 @@ class SmartContract:
         self.memory = dict()
         self.gasStorage = []
         self.gasCompute = []
-        self.dero_value = None
-        self.assset_value = None
 
         # At first instanciaion, create the smart-contract Id
         if SmartContract.scid is None:
             SmartContract.scid = sha256(str(time.time()*2).encode()).hexdigest()
 
-    def send_dero_with_tx(self, amount):
-        self.dero_value = amount
+    @staticmethod
+    def send_dero_with_tx(amount):
+        SmartContract.dero_value = amount
 
-    def send_asset_with_tx(self, amount, asset_id):
-        if self.asset_value is None:
-            self.asset_value = {}
+    @staticmethod
+    def send_asset_with_tx(amount, asset_id):
+        if SmartContract.asset_value is None:
+            SmartContract.asset_value = {}
         
-        self.asset_value[asset_id] = amount
+        SmartContract.asset_value[asset_id] = amount
 
 
 
