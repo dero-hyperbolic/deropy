@@ -1,5 +1,3 @@
-import logging
-
 from deropy.dvm.functions.Function import Function
 
 class MapDelete(Function):

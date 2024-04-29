@@ -1,4 +1,3 @@
-import logging
 import random as rd
 
 from deropy.dvm.functions.Function import Function

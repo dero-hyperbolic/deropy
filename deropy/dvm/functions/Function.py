@@ -1,5 +1,3 @@
-import logging
-
 from deropy.dvm.Smartcontract import SmartContract
 from deropy.dvm.utils import print_interpreter
 
