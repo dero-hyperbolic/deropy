@@ -41,10 +41,20 @@ As I am actively using deropy to work on my own smart contracts, I will be addin
   - g45-c + g45-nft automatic deployment 
 - API builder for any SC already deployed on chain
 
-## Installation
+# Installation
 
+## Directly from the python public repositry
 ```bash
 pip install deropy
+deropy configure 
+```
+
+## From sources
+```bash
+git clone https://github.com/dero-hyperbolic/deropy.git
+cd deropy
+pip install .
+deropy configure
 ```
 
 ## Quick Start
@@ -53,8 +63,9 @@ pip install deropy
 deropy deploy -g path/to/sc.bas
 ```
 
-**If the simulator is running**
 this command will:
+
+**If the simulator is running**
 - Deploy your smart contract to the simulator
 - Create a new SC.py file in the current directory with the correct SCID.
 - A new tests/test_sc.py file in the current directory.
@@ -64,7 +75,7 @@ this command will:
 SC.py will contain a class that allow you to call every function implemented in your smart contract
 test_sc.py will contain a test class that provide you with a basic test skeleton for every function implemented in your smart contract
 
-### Usage in a python script or terminal
+## Usage in a python script or terminal
 ```python
 from SC import SC
 sc = SC()
