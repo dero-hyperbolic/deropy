@@ -1,4 +1,5 @@
 from deropy.dvm.functions.Function import Function
+from deropy.dvm.Wallet import WalletSimulator, Wallet
 
 
 class SendAssetToAddress(Function):
@@ -11,12 +12,24 @@ class SendAssetToAddress(Function):
         super().__init__("send_asset_to_address", 90_000, 0, func_parameters)
 
     def _computeGasStorageCost(self):
-        return len(self.parameters["raw_address"]["value"]) + len(self.parameters["asset"]["value"])
+        return len(self.parameters["raw_address"]["value"])
 
     def _exec(self, *args, **kwargs):
+        if WalletSimulator.is_initialized() is False:
+            raise RuntimeError("WalletSimulator is not initialized")
+        if WalletSimulator.active_wallet is None:
+            raise RuntimeError("No active wallet")
+
         self.parameters["raw_address"]["value"] = kwargs["raw_address"]
         self.parameters["amount"]["value"] = kwargs["amount"]
         self.parameters["asset"]["value"] = kwargs["asset"]
+
+        destination_wallet: Wallet = WalletSimulator.get_wallet_from_raw(self.parameters["raw_address"]["value"])
+        if destination_wallet is None:
+            return 1
+
+        destination_wallet.set_balance(self.parameters["asset"]["value"], self.parameters["amount"]["value"])
+
         return 0
 
 
