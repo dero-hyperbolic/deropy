@@ -94,7 +94,7 @@ def logger(func):
         sc.gasStorage = []
 
         print("-" * 120)
-        print("Function: ", func.__name__)
+        print("Function: ", func.func_name)
         value = func(*args, **kwargs)
         print('----')
 
