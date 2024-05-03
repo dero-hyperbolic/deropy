@@ -6,11 +6,13 @@ class Exists(Function):
         func_parameters = {
             'key': {"type": "str", "value": None},
         }
-        super().__init__("exists", 1_000, 0, func_parameters)
+        super().__init__("exists", 5_000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
         self.parameters['key']['value'] = kwargs['key']
-        return kwargs['key'] in self.sc.storage
+        if kwargs['key'] in self.sc.storage:
+            return 1
+        return 0
 
     def _computeGasStorageCost(self):
         return 0
