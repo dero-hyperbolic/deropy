@@ -5,7 +5,7 @@ class Wallet:
     def __init__(self, id):
         self.string_address = hashlib.sha256(str(id).encode()).hexdigest()
         self.raw_address = self.string_address[:33]
-        self.balance = 0
+        self.balance = {}
 
     @classmethod
     def from_public_key(cls, public_key):
@@ -13,6 +13,12 @@ class Wallet:
         wallet.string_address = public_key
         wallet.raw_address = public_key[:33]
         return wallet
+    
+    def get_balance(self, token):
+        return self.balance.get(token, 0)
+    
+    def set_balance(self, token, amount):
+        self.balance[token] = amount
 
 
 class WalletSimulator:
@@ -40,6 +46,15 @@ class WalletSimulator:
             if wallet.raw_address == raw_address:
                 return id
         raise Exception("Wallet not found")
+    
+    @staticmethod
+    def get_wallet_from_raw(raw_address):
+        id = WalletSimulator.find_wallet_id_from_raw(raw_address)
+        return WalletSimulator.get_wallet_from_id(id)
+    
+    @staticmethod
+    def get_wallet_from_id(id):
+        return WalletSimulator.wallets[id]
 
     @staticmethod
     def get_raw_address():
