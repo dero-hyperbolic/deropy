@@ -60,4 +60,4 @@ class TestMapExists:
     def test_exists(self):
         map_store('key', 'value')
 
-        assert map_exists('key') is True
+        assert map_exists('key') == 1
