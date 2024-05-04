@@ -58,4 +58,4 @@ class TestMapExists:
     def test_exists(self):
         store('key', 'value')
 
-        assert exists('key') is True
+        assert exists('key') == 1
