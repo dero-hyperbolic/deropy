@@ -12,8 +12,7 @@ class Lottery(SmartContract):
             store('deposit_total', 0)
             store('deposit_count', 0)
             return 0
-        else:
-            return 1
+        return 1
 
     def Lottery(self, value: int) -> int:
         deposit_count: int = load("deposit_count") + 1
@@ -23,7 +22,7 @@ class Lottery(SmartContract):
         store('deposit_total', load('deposit_total') + value)
         store('deposit_count', deposit_count)
 
-        if load('lotteryeveryXdeposit') > deposit_count:
+        if load('lotteryeveryXdeposit') < deposit_count:
             return 0
 
         winner: int = random(0, deposit_count)

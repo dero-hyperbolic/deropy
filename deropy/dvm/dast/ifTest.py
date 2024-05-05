@@ -18,7 +18,7 @@ class IfTest:
         if_body = [dast_converter.to_dast(n) for n in json_iast["if_body"]]
         else_body = [dast_converter.to_dast(n) for n in json_iast["else_body"]]
         return cls(mode, condition, if_body, else_body)
-    
+
     def to_json(self):
         return json.dumps(
             {
@@ -29,12 +29,12 @@ class IfTest:
                 "else_body": [json.loads(n.to_json()) for n in self.else_body]
             }
         )
-    
+
     def __repr__(self):
         if self.mode == "if":
             if self.else_body:
-                return f"IF {self.condition} THEN GOTO {self.if_body[0]} ELSE GOTO {self.else_body[0]}"
+                return f"IF {self.condition} THEN GOTO {self.else_body[0]}"
             return f"IF {self.condition} THEN GOTO {self.if_body[0]}"
-        
+
         else:
             return f"IF {self.condition} THEN GOTO {self.if_body[0]}"
