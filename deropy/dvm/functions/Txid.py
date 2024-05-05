@@ -1,6 +1,3 @@
-import logging
-import random as rd
-
 from deropy.dvm.functions.Function import Function
 
 
@@ -13,10 +10,10 @@ class Txid(Function):
 
     def _exec(self, *args, **kwargs):
         raise NotImplementedError("This function is not implemented yet")
-    
+
     def _computeGasStorageCost(self):
         return 0
-            
-        
+
+
 def txid():
     return Txid()()

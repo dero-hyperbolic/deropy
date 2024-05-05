@@ -1,5 +1,6 @@
 from deropy.dvm.functions.Function import Function
 
+
 class IsAddressValid(Function):
     def __init__(self):
         func_parameters = {
@@ -14,6 +15,7 @@ class IsAddressValid(Function):
         self.parameters["address"]["value"] = kwargs["address"]
         is_valid = 0  # FIXME: This is a placeholder value
         return is_valid
-    
+
+
 def is_address_valid(address: str):
     return IsAddressValid()(address=address)

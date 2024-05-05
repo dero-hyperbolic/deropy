@@ -14,9 +14,10 @@ class Keccak256(Function):
         k = keccak.new(digest_bits=256)
         k.update(kwargs["s"].encode())
         return k.hexdigest()
-    
-    def _computeGasStorageCost(self): 
+
+    def _computeGasStorageCost(self):
         return 0
+
 
 def keccak256(s: str):
     return Keccak256()(s=s)

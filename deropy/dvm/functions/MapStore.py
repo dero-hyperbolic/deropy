@@ -17,5 +17,6 @@ class MapStore(Function):
     def _computeGasStorageCost(self):
         return 0
 
+
 def map_store(variable: str, value):
     return MapStore()(key=variable, value=value)

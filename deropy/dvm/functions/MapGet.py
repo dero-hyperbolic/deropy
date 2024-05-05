@@ -1,5 +1,6 @@
 from deropy.dvm.functions.Function import Function
 
+
 class MapGet(Function):
     def __init__(self):
         func_parameters = {
@@ -13,6 +14,7 @@ class MapGet(Function):
     def _exec(self, *args, **kwargs):
         self.parameters["key"]["value"] = kwargs["key"]
         return self.sc.memory[kwargs["key"]]
-    
+
+
 def map_get(key: str):
     return MapGet()(key=key)

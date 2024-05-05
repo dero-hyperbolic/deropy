@@ -1,7 +1,5 @@
-import logging
-import random as rd
-
 from deropy.dvm.functions.Function import Function
+from deropy.dvm.Smartcontract import SmartContract
 
 
 class Scid(Function):
@@ -12,13 +10,13 @@ class Scid(Function):
         super().__init__("scid", 2000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
-        value = "f62fa283bf76fe0da393218ce84737c78988b539f79bf8316acaffb806d108bc" # FIXME: Find a way to get this value from the singleton
+        value = SmartContract.scid
         self.parameters['value']['value'] = value
         return value
-    
+
     def _computeGasStorageCost(self):
         return 0
-            
-        
+
+
 def scid():
     return Scid()()

@@ -1,5 +1,3 @@
-import logging
-
 from deropy.dvm.functions.Function import Function
 
 
@@ -10,10 +8,10 @@ class Panic(Function):
 
     def _exec(self, *args, **kwargs):
         raise RuntimeError("Panic")
-    
+
     def _computeGasStorageCost(self):
         return 0
-            
-        
+
+
 def panic():
     return Panic()()

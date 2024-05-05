@@ -1,8 +1,8 @@
 import requests
 import click
-import json
 
 from deropy.commands.generate import _generate_class, _generate_tests
+
 
 @click.command('deploy')
 @click.argument('file', type=click.Path())
@@ -14,6 +14,7 @@ def deploy(file, generate):
     if generate:
         _generate_class(file, sc_txid)
         _generate_tests(file)
+
 
 def _deploy(file: str):
     with open(file, 'r') as f:

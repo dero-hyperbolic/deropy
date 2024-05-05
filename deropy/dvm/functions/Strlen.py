@@ -11,9 +11,10 @@ class Strlen(Function):
     def _exec(self, *args, **kwargs):
         self.parameters["s"]["value"] = kwargs["s"]
         return len(kwargs["s"])
-    
-    def _computeGasStorageCost(self): 
+
+    def _computeGasStorageCost(self):
         return 0
+
 
 def strlen(s: str):
     return Strlen()(s=s)

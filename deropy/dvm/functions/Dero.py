@@ -1,6 +1,3 @@
-import logging
-import random as rd
-
 from deropy.dvm.functions.Function import Function
 
 
@@ -15,10 +12,10 @@ class Dero(Function):
         value = "0000000000000000000000000000000000000000000000000000000000000000"
         self.parameters['value']['value'] = value
         return value
-    
+
     def _computeGasStorageCost(self):
         return 0
-            
-        
+
+
 def dero():
     return Dero()()

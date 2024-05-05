@@ -10,14 +10,15 @@ class Atoi(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters["s"]["value"] = kwargs["s"]
-        
+
         try:
             return str(int(kwargs["s"]))
-        except:
+        except Exception:
             raise ValueError(f"ATOI({kwargs['s']}) failed")
-        
-    def _computeGasStorageCost(self): 
+
+    def _computeGasStorageCost(self):
         return 0
+
 
 def atoi(s: str):
     return Atoi()(s=s)

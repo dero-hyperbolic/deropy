@@ -1,5 +1,6 @@
 from deropy.dvm.functions.Function import Function
 
+
 class Load(Function):
     def __init__(self):
         func_parameters = {
@@ -10,11 +11,11 @@ class Load(Function):
     def _computeGasStorageCost(self):
         if self.sc.storage[self.parameters["key"]["value"]] is None:
             raise Exception(f"KeyError: {self.parameters['key']['value']} not found in SmartContract storage")
-    
+
         loaded_value = self.sc.storage[self.parameters["key"]["value"]]
         if isinstance(loaded_value, int):
             return 1
-        
+
         if len(loaded_value) < 10:
             return 1
         return len(loaded_value) // 10
@@ -22,11 +23,7 @@ class Load(Function):
     def _exec(self, *args, **kwargs):
         self.parameters["key"]["value"] = kwargs["key"]
         return self.sc.storage[kwargs["key"]]
-    
+
+
 def load(key: str):
     return Load()(key=key)
-
-def load_dero(key: str):
-    l =  Load()
-    l(key=key)
-    return l.convert()

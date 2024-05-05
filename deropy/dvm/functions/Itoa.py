@@ -10,15 +10,15 @@ class Itoa(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters["n"]["value"] = kwargs["n"]
-        
+
         try:
             return int(str(kwargs["n"]))
-        except:
+        except Exception:
             raise ValueError(f"ITOA({kwargs['s']}) failed")
-        
-    
-    def _computeGasStorageCost(self): 
+
+    def _computeGasStorageCost(self):
         return 0
+
 
 def itoa(n: str):
     return Itoa()(n=n)
