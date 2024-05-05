@@ -70,74 +70,67 @@ class Lottery(SmartContract):
 # We can now test the smart contract by creating a scenario.
 # For more complexe SC, it will be necessary to create a proper test suite.
 if __name__ == '__main__':
-    from deropy.dvm.Wallet import WalletSimulator
+    from deropy.dvm.Wallet import WalletSimulator, Wallet
 
     # Let define three wallets
-    WalletSimulator.create_wallet('hyperbolic')
-    WalletSimulator.create_wallet('new_owner')
-    WalletSimulator.create_wallet('random_user')
-
-    WalletSimulator.active_wallet = 'hyperbolic'
+    wl_hyperbolic: Wallet = WalletSimulator.create_wallet('hyperbolic')
+    wl_no: Wallet = WalletSimulator.create_wallet('new_owner')
+    wl_ru: Wallet = WalletSimulator.create_wallet('random_user')
 
     # configure the test scenario
     sc = Lottery()
 
     # Initialize the smart contract (akin to deployement on the blockchain)
-    sc.Initialize()
+    wl_hyperbolic.invoke_sc_function(sc.Initialize)
+    # sc.Initialize()
     current_storage = SmartContract.get_instance().storage
     assert current_storage['deposit_count'] == 0
     assert current_storage['deposit_total'] == 0
-    assert current_storage['owner'] == WalletSimulator.get_raw_address_from_id('hyperbolic')
+    assert current_storage['owner'] == wl_hyperbolic.raw_address
     assert current_storage['lotteryeveryXdeposit'] == 2
     assert current_storage['lotterygiveback'] == 9900
 
     # Play the lottery
-    sc.Lottery(1000)
+    wl_hyperbolic.invoke_sc_function(sc.Lottery, 1000)
     current_storage = SmartContract.get_instance().storage
     assert current_storage['deposit_count'] == 1
     assert current_storage['deposit_total'] == 1000
     assert current_storage['depositor_address0']
-    assert current_storage['depositor_address0'] == WalletSimulator.get_raw_address_from_id('hyperbolic')
+    assert current_storage['depositor_address0'] == wl_hyperbolic.raw_address
 
     # The owner tune the lottery parameters
-    sc.TuneLotteryParameters(10, 9000)
+    wl_hyperbolic.invoke_sc_function(sc.TuneLotteryParameters, (10, 9000))
     current_storage = SmartContract.get_instance().storage
     assert current_storage['lotteryeveryXdeposit'] == 10
     assert current_storage['lotterygiveback'] == 9000
 
     # somebody else than the owner try to tune the lottery parameters
-    WalletSimulator.active_wallet = 'random_user'
-    sc.TuneLotteryParameters(2, 9900)
+    wl_ru.invoke_sc_function(sc.TuneLotteryParameters, (2, 9900))
     current_storage = SmartContract.get_instance().storage
     assert current_storage['lotteryeveryXdeposit'] == 10
     assert current_storage['lotterygiveback'] == 9000
 
     # The owner transfer the ownership
-    WalletSimulator.active_wallet = 'hyperbolic'
-    sc.TransferOwnership(WalletSimulator.get_string_address_from_id('new_owner'))
+    wl_hyperbolic.invoke_sc_function(sc.TransferOwnership, wl_no.string_address)
     current_storage = SmartContract.get_instance().storage
-    assert current_storage['tmpowner'] == WalletSimulator.get_raw_address_from_id('new_owner')
+    assert current_storage['tmpowner'] == wl_no.raw_address
 
     # Somebody random try to claim the ownership, it should not work
-    WalletSimulator.active_wallet = 'random_user'
-    sc.ClaimOwnership()
+    wl_ru.invoke_sc_function(sc.ClaimOwnership)
     current_storage = SmartContract.get_instance().storage
-    assert current_storage['owner'] != WalletSimulator.get_raw_address_from_id('random_user')
-    assert current_storage['owner'] == WalletSimulator.get_raw_address_from_id('hyperbolic')
+    assert current_storage['owner'] != wl_ru.raw_address
+    assert current_storage['owner'] == wl_hyperbolic.raw_address
 
     # The new owner claim the ownership
-    WalletSimulator.active_wallet = 'new_owner'
-    sc.ClaimOwnership()
+    wl_no.invoke_sc_function(sc.ClaimOwnership)
     current_storage = SmartContract.get_instance().storage
-    assert current_storage['owner'] == WalletSimulator.get_raw_address_from_id('new_owner')
+    assert current_storage['owner'] == wl_no.raw_address
 
     # Somebody random try to withdraw, it should not work
-    WalletSimulator.active_wallet = 'random_user'
-    sc.Withdraw(1000)
+    wl_ru.invoke_sc_function(sc.Withdraw, 1000)
     current_storage = SmartContract.get_instance().storage
     assert current_storage['deposit_total'] == 1000
 
     # the owner withdraw
-    WalletSimulator.active_wallet = 'new_owner'
-    sc.Withdraw(1000)
+    wl_no.invoke_sc_function(sc.Withdraw, 1000)
     current_storage = SmartContract.get_instance().storage

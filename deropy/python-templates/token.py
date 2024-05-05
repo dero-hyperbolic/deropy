@@ -36,22 +36,16 @@ class Token(SmartContract):
 # We can now test the smart contract by creating a scenario.
 # For more complexe SC, it will be necessary to create a proper test suite.
 if __name__ == '__main__':
-    from deropy.dvm.Wallet import WalletSimulator
+    from deropy.dvm.Wallet import WalletSimulator, Wallet
 
-    # Let define three wallets
-    WalletSimulator.create_wallet('hyperbolic')
-    WalletSimulator.create_wallet('new_owner')
-    WalletSimulator.create_wallet('random_user')
+    wl_hyperbolic: Wallet = WalletSimulator.create_wallet('hyperbolic')
 
-    WalletSimulator.active_wallet = 'hyperbolic'
     sc = Token()
 
     # Initialize the smart contract (akin to deployement on the blockchain)
-    sc.InitializePrivate()
+    wl_hyperbolic.invoke_sc_function(sc.InitializePrivate)
 
     # Test the IssueTokenX function
-    sc.send_dero_with_tx(100)
-    assert sc.IssueTokenX() == 0
+    wl_hyperbolic.invoke_sc_function(sc.IssueTokenX, dero_deposit=100)
 
-    # Test the ConvertTokenX function
-    assert sc.ConvertTokenX() == 0
+    wl_hyperbolic.invoke_sc_function(sc.ConvertTokenX)

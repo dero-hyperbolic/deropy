@@ -30,37 +30,33 @@ class NameService(SmartContract):
 # We can now test the smart contract by creating a scenario.
 # For more complexe SC, it will be necessary to create a proper test suite.
 if __name__ == '__main__':
-    from deropy.dvm.Wallet import WalletSimulator
+    from deropy.dvm.Wallet import WalletSimulator, Wallet
 
     # Let define three wallets
-    WalletSimulator.create_wallet('hyperbolic')
-    WalletSimulator.create_wallet('new_owner')
-    WalletSimulator.create_wallet('random_user')
+    wl_hyperbolic: Wallet = WalletSimulator.create_wallet('hyperbolic')
+    wl_no: Wallet = WalletSimulator.create_wallet('new_owner')
+    wl_random: Wallet = WalletSimulator.create_wallet('random_user')
     WalletSimulator.create_wallet_from_public_key("deto1qyvyeyzrcm2fzf6kyq7egkes2ufgny5xn77y6typhfx9s7w3mvyd5qqynr5hx")
 
-    WalletSimulator.active_wallet = 'hyperbolic'
-
-    # configure the test scenario
     sc = NameService()
 
     # Initialize the smart contract (akin to deployement on the blockchain)
-    sc.Initialize()
+    wl_hyperbolic.invoke_sc_function(sc.Initialize)
 
     # Test the Register function
-    assert sc.Register("test") == 0
+    wl_hyperbolic.invoke_sc_function(sc.Register, "test")
     assert "test" not in SmartContract.get_instance().storage
 
-    assert sc.Register("hyperbolic") == 0
+    wl_hyperbolic.invoke_sc_function(sc.Register, "hyperbolic")
     assert "hyperbolic" in SmartContract.get_instance().storage
-    assert SmartContract.get_instance().storage["hyperbolic"] == WalletSimulator.get_raw_address_from_id('hyperbolic')
+    assert SmartContract.get_instance().storage["hyperbolic"] == wl_hyperbolic.raw_address
 
     # ---- Somebody else cannot claim that name anymore
-    WalletSimulator.active_wallet = 'random_user'
-    assert sc.Register("hyperbolic") == 0
+    wl_random.invoke_sc_function(sc.Register, "hyperbolic")
     assert "hyperbolic" in SmartContract.get_instance().storage
-    assert SmartContract.get_instance().storage["hyperbolic"] == WalletSimulator.get_raw_address_from_id('hyperbolic')
+    assert SmartContract.get_instance().storage["hyperbolic"] == wl_hyperbolic.raw_address
 
     # ---- Until the original owner transfer the ownership
     WalletSimulator.active_wallet = 'hyperbolic'
-    sc.TransferOwnership("hyperbolic", WalletSimulator.get_string_address_from_id('new_owner'))
-    assert SmartContract.get_instance().storage["hyperbolic"] == WalletSimulator.get_raw_address_from_id('new_owner')
+    wl_hyperbolic.invoke_sc_function(sc.TransferOwnership, ("hyperbolic", wl_no.string_address))
+    assert SmartContract.get_instance().storage["hyperbolic"] == wl_no.raw_address
