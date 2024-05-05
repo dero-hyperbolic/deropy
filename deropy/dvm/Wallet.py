@@ -49,8 +49,8 @@ class WalletSimulator:
         return WalletSimulator.wallets[id]
 
     @staticmethod
-    def create_wallet_from_public_key(public_key):
-        WalletSimulator.wallets[public_key] = Wallet.from_public_key(public_key)
+    def create_wallet_from_public_key(id, public_key):
+        WalletSimulator.wallets[id] = Wallet.from_public_key(public_key)
 
     @staticmethod
     def find_wallet_id_from_string(string_address):
