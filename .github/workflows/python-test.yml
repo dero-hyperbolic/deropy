@@ -33,3 +33,10 @@ jobs:
     - name: Test with pytest
       run: |
         pytest tests/test_*.py -v
+    
+    - name: Run templates simulator tests
+      run: |
+        pytest tests/templates/test_lottery.py -v
+        pytest tests/templates/test_minimum_sc.py -v
+        pytest tests/templates/test_nameservice.py -v
+        pytest tests/templates/test_token.py -v
