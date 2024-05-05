@@ -2,12 +2,10 @@ from deropy.dvm.Smartcontract import SmartContract
 from deropy.dvm.Wallet import WalletSimulator, Wallet
 from deropy.python_templates.token import Token
 
-# Let define three wallets
+# configure the test scenario
 wl_hyperbolic: Wallet = WalletSimulator.create_wallet('hyperbolic')
 wl_random: Wallet = WalletSimulator.create_wallet('random_user')
 
-# configure the test scenario
-SmartContract.get_instance().reset_sc()
 sc = Token()
 
 

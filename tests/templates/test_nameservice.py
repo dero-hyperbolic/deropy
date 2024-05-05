@@ -2,13 +2,12 @@ from deropy.dvm.Smartcontract import SmartContract
 from deropy.dvm.Wallet import WalletSimulator, Wallet
 from deropy.python_templates.Nameservice import NameService
 
-# Let define three wallets
+# configure the test scenario
 wl_hyperbolic: Wallet = WalletSimulator.create_wallet('hyperbolic')
 wl_new: Wallet = WalletSimulator.create_wallet('new_owner')
 wl_random: Wallet = WalletSimulator.create_wallet('random_user')
 wl_fixed: Wallet = WalletSimulator.create_wallet_from_public_key('hardcoded', 'deto1qyvyeyzrcm2fzf6kyq7egkes2ufgny5xn77y6typhfx9s7w3mvyd5qqynr5hx')
 
-# configure the test scenario
 sc = NameService()
 
 

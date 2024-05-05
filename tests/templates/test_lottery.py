@@ -68,4 +68,3 @@ class TestLottery:
 
     def test_withdraw(self):
         wl_new.invoke_sc_function(sc.Withdraw, 1000)
-        current_storage = SmartContract.get_instance().storage

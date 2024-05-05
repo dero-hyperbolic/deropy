@@ -8,8 +8,6 @@ wl_new: Wallet = WalletSimulator.create_wallet('new_owner')
 wl_random: Wallet = WalletSimulator.create_wallet('random_user')
 
 sc = Minimal()
-SmartContract.get_instance().storage = {}
-SmartContract.get_instance().memory = {}
 
 
 class TestMinimumSC:
