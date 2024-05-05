@@ -7,7 +7,7 @@ import os
 @click.option('-s', '--scid', type=str, help='The SCID of the smart contract', default='')
 def generate(file, scid):
     _generate_class(file, scid)
-    _generate_tests(file)
+    # _generate_tests(file)
 
 
 def _generate_tests(file):
@@ -16,7 +16,7 @@ def _generate_tests(file):
 
     lines = ['from SC import SC']
     lines += ['import unittest']
-    lines += ['']
+    lines += ['', '']
     lines += ['class TestSC(unittest.TestCase):']
     lines += ['']
     lines += ['    def setUp(self):']
@@ -79,9 +79,13 @@ def _generate_class(file: str, scid: str):
     file_content = _read_bas(file)
     functions = _parse_function(file_content)
 
+    class_name = os.path.basename(file)
+    class_name = class_name.split('.')[0]
+    class_name = class_name.capitalize()
+
     lines = ['import requests']
     lines += ['import json\n']
-    lines += ['class SC:']
+    lines += [f'class {class_name}:']
     lines += [f'    SCID="{scid}"']
     lines += ['    def __init__(self):']
     lines += ["        self.url = 'http://127.0.0.1:30000/json_rpc'"]
