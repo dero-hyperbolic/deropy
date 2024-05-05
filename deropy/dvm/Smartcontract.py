@@ -1,6 +1,7 @@
 from hashlib import sha256
 import functools
 import time
+import os
 
 from deropy.dvm.utils import print_red
 
