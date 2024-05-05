@@ -1,8 +1,10 @@
 import hashlib
+from deropy.dvm.Smartcontract import SmartContract
 
 
 class Wallet:
     def __init__(self, id):
+        self.id = id
         self.string_address = hashlib.sha256(str(id).encode()).hexdigest()
         self.raw_address = self.string_address[:33]
         self.balance = {}
@@ -13,10 +15,26 @@ class Wallet:
         wallet.string_address = public_key
         wallet.raw_address = public_key[:33]
         return wallet
-    
+
+    def invoke_sc_function(self, func, func_args: tuple = None, dero_deposit: int = None, asset_deposit: tuple = None):
+        WalletSimulator.active_wallet = self.id
+
+        if dero_deposit is not None:
+            SmartContract.send_dero_with_tx(dero_deposit)
+        if asset_deposit is not None:
+            SmartContract.send_asset_with_tx(asset_deposit[0], asset_deposit[1])
+
+        if func_args is None:
+            return func()
+
+        if not isinstance(func_args, (tuple, list)):
+            func_args = (func_args,)
+
+        return func(*func_args)
+
     def get_balance(self, token):
         return self.balance.get(token, 0)
-    
+
     def set_balance(self, token, amount):
         self.balance[token] = amount
 
@@ -28,6 +46,7 @@ class WalletSimulator:
     @staticmethod
     def create_wallet(id):
         WalletSimulator.wallets[id] = Wallet(id)
+        return WalletSimulator.wallets[id]
 
     @staticmethod
     def create_wallet_from_public_key(public_key):
