@@ -10,10 +10,14 @@ simulator_host = 'http://127.0.0.1:30000'
 @click.option('-s', '--scid', type=str, help='The SCID of the smart contract', default='')
 @click.option('--network', type=click.Choice(['simulator', 'mainnet']), default='simulator')
 def generate(file, scid, network):
+    _generate(file, scid, network)
+
+
+def _generate(file, scid, network):
     host = simulator_host
 
     _generate_class(file, scid, host)
-    # _generate_tests(file)
+    # _generate_tests(file
 
 
 def _generate_tests(file):
