@@ -4,6 +4,10 @@ import os, shutil
 simulator_host = 'http://127.0.0.1:30000'
 
 
+def get_working_directory():
+    return os.path.expanduser('~/.deropy')
+
+
 def initialise_working_directory():
     # path = ~/.deropy
     path = os.path.expanduser('~/.deropy')

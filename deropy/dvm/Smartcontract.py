@@ -1,7 +1,6 @@
 from hashlib import sha256
 import functools
 import time
-import os
 
 from deropy.dvm.utils import print_red
 
@@ -46,6 +45,9 @@ class SmartContract:
         # At first instanciaion, create the smart-contract Id
         if SmartContract.scid is None:
             SmartContract.scid = sha256(str(time.time()*2).encode()).hexdigest()
+
+    def read(self):
+        return self.storage
 
     @staticmethod
     def send_dero_with_tx(amount):

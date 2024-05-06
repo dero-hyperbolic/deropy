@@ -30,14 +30,19 @@ def flatten_list(lists):
 
     return output
 
+
 def filter_args_out(args):
     if isinstance(args, ast.arg):
         if args.arg == 'self':
             return False
     return True
 
+
 def print_interpreter(msg: list):
-    term_width = os.get_terminal_size().columns
+    try:
+        term_width = os.get_terminal_size().columns
+    except OSError:
+        term_width = 80
 
     def format_column(content, width):
         if len(content) > width:

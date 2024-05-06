@@ -9,14 +9,15 @@ simulator_host = 'http://127.0.0.1:30000'
 @click.argument('file', type=click.Path())
 @click.option('-s', '--scid', type=str, help='The SCID of the smart contract', default='')
 @click.option('--network', type=click.Choice(['simulator', 'mainnet']), default='simulator')
-def generate(file, scid, network):
-    _generate(file, scid, network)
+@click.option('-o', '--output', type=click.Path(), help='The output file')
+def generate(file, scid, network, output):
+    _generate(file, scid, network, output)
 
 
-def _generate(file, scid, network):
+def _generate(file, scid, network, output):
     host = simulator_host
 
-    _generate_class(file, scid, host)
+    _generate_class(file, scid, output)
     # _generate_tests(file
 
 
@@ -44,7 +45,7 @@ def _generate_tests(file):
 
 
 def _generate_test_method(f_name, p):
-    lines = [f'\n    def test_{_camelCase_to_snake_case(f_name)}(self):']
+    lines = [f'\n    def test_{f_name}(self):']
 
     # Create a parameter map
     if len(p) != 0:
@@ -65,11 +66,11 @@ def _generate_test_method(f_name, p):
     # Create the method call
     lines += ['        # ---- Invoke the SC function (use the commented line if you need to setup fee)']
     if len(p) > 0:
-        lines += [f'        response_json = SC.{_camelCase_to_snake_case(f_name)}(**params)']
-        lines += [f'        #response_json = SC.{_camelCase_to_snake_case(f_name)}_fee(1000, **params)']
+        lines += [f'        response_json = SC.{f_name}(**params)']
+        lines += [f'        #response_json = SC.{f_name}_fee(1000, **params)']
     else:
-        lines += [f'        response_json = SC.{_camelCase_to_snake_case(f_name)}()']
-        lines += [f'        #response_json = SC.{_camelCase_to_snake_case(f_name)}_fee(1000)']
+        lines += [f'        response_json = SC.{f_name}()']
+        lines += [f'        #response_json = SC.{f_name}_fee(1000)']
 
     lines += ['']
 
@@ -85,9 +86,11 @@ def _generate_test_method(f_name, p):
     return lines
 
 
-def _generate_class(file: str, scid: str, host: str):
+def _generate_class(file: str, scid: str, output: str = None):
     file_content = _read_bas(file)
     functions = _parse_function(file_content)
+
+    output_path = output if output is not None else 'SC.py'
 
     class_name = os.path.basename(file)
     class_name = class_name.split('.')[0]
@@ -98,7 +101,7 @@ def _generate_class(file: str, scid: str, host: str):
     lines += [f'class {class_name}:']
     lines += [f'    SCID="{scid}"']
     lines += ['    def __init__(self):']
-    lines += [f"        self.url = '{host}/json_rpc'"]
+    lines += [f"        self.url = '{simulator_host}/json_rpc'"]
     lines += ["        self.headers = {'content-type': 'application/json'}"]
     lines += ['']
     lines.extend(_generate_read_method(scid))
@@ -108,7 +111,7 @@ def _generate_class(file: str, scid: str, host: str):
         lines.extend(scinvoce_method)
         # lines.extend(transfer2_method)
 
-    with open('SC.py', 'w') as f:
+    with open(output_path, 'w') as f:
         for line in lines:
             f.write(f'{line}\n')
 
@@ -163,8 +166,10 @@ def _generate_read_method(scid):
         '            }',
         '        }',
         '        response = requests.post(url, data=json.dumps(payload), headers=self.headers)',
-        '        print(response.json())',
-        '        return response.json()'
+        '        # keep only the `stringkeys` and `variables`',
+        '        data = response.json()',
+        '        self.storage = data["result"]["stringkeys"]',
+        '        return self.storage',
     ]
 
 
@@ -176,9 +181,9 @@ def _generate_method_scinvoce(f_name, p, class_name):
     method_parameters = method_parameters[:-2]
 
     if len(method_parameters) == 0:
-        lines = [f'\n    def {_camelCase_to_snake_case(f_name)}(self, dero_deposit: int = 0, asset_deposit: int = 0):']
+        lines = [f'\n    def {f_name}(self, dero_deposit: int = 0, asset_deposit: int = 0):']
     else:
-        lines = [f'\n    def {_camelCase_to_snake_case(f_name)}(self, {method_parameters}, dero_deposit: int = 0, asset_deposit: int = 0):']
+        lines = [f'\n    def {f_name}(self, {method_parameters}, dero_deposit: int = 0, asset_deposit: int = 0):']
 
     scrpc = [
         '                    "sc_rpc": [',
@@ -232,9 +237,9 @@ def _generate_method_transfer2(f_name, p):
     method_parameters = method_parameters[:-2]
 
     if len(method_parameters) == 0:
-        lines = [f'\n    def {_camelCase_to_snake_case(f_name)}_fee(self, fee: int):']
+        lines = [f'\n    def {f_name}_fee(self, fee: int):']
     else:
-        lines = [f'\n    def {_camelCase_to_snake_case(f_name)}_fee(self, fee: int, {method_parameters}):']
+        lines = [f'\n    def {f_name}_fee(self, fee: int, {method_parameters}):']
 
     scrpc = [
         '                    "sc_rpc": [',
@@ -301,6 +306,3 @@ def _SC_type_to_jsonrpc(t: str):
         return "U"
     raise RuntimeError(f'type {t} do not exist in DERO')
 
-
-def _camelCase_to_snake_case(name: str) -> str:
-    return ''.join(['_' + i.lower() if i.isupper() else i for i in name]).lstrip('_')
