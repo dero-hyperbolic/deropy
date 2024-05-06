@@ -3,6 +3,7 @@ import click
 from deropy.commands.configure import configure
 from deropy.commands.generate import generate
 from deropy.commands.deploy import deploy
+from deropy.commands.transpile import transpile
 
 
 @click.group('deropy')
@@ -14,6 +15,7 @@ def deropy():
 deropy.add_command(generate)
 deropy.add_command(deploy)
 deropy.add_command(configure)
+deropy.add_command(transpile)
 
 if __name__ == '__main__':
     deropy()
