@@ -2,11 +2,17 @@ import click
 import os
 
 
+simulator_host = 'http://127.0.0.1:30000'
+
+
 @click.command('generate')
 @click.argument('file', type=click.Path())
 @click.option('-s', '--scid', type=str, help='The SCID of the smart contract', default='')
-def generate(file, scid):
-    _generate_class(file, scid)
+@click.option('--network', type=click.Choice(['simulator', 'mainnet']), default='simulator')
+def generate(file, scid, network):
+    host = simulator_host
+
+    _generate_class(file, scid, host)
     # _generate_tests(file)
 
 
@@ -75,7 +81,7 @@ def _generate_test_method(f_name, p):
     return lines
 
 
-def _generate_class(file: str, scid: str):
+def _generate_class(file: str, scid: str, host: str):
     file_content = _read_bas(file)
     functions = _parse_function(file_content)
 
@@ -88,15 +94,15 @@ def _generate_class(file: str, scid: str):
     lines += [f'class {class_name}:']
     lines += [f'    SCID="{scid}"']
     lines += ['    def __init__(self):']
-    lines += ["        self.url = 'http://127.0.0.1:30000/json_rpc'"]
+    lines += [f"        self.url = '{host}/json_rpc'"]
     lines += ["        self.headers = {'content-type': 'application/json'}"]
     lines += ['']
     lines.extend(_generate_read_method(scid))
     for f, p in functions.items():
-        scinvoce_method = _generate_method_scinvoce(f, p)
-        transfer2_method = _generate_method_transfer2(f, p)
+        scinvoce_method = _generate_method_scinvoce(f, p, class_name)
+        # transfer2_method = _generate_method_transfer2(f, p)
         lines.extend(scinvoce_method)
-        lines.extend(transfer2_method)
+        # lines.extend(transfer2_method)
 
     with open('SC.py', 'w') as f:
         for line in lines:
@@ -158,17 +164,17 @@ def _generate_read_method(scid):
     ]
 
 
-def _generate_method_scinvoce(f_name, p):
+def _generate_method_scinvoce(f_name, p, class_name):
     # create the method definition
     method_parameters = ''
     for k, v in p.items():
-        method_parameters += f'{k}:{_SC_type_to_python_type(v)}, '
+        method_parameters += f'{k}: {_SC_type_to_python_type(v)}, '
     method_parameters = method_parameters[:-2]
 
     if len(method_parameters) == 0:
-        lines = [f'\n    def {_camelCase_to_snake_case(f_name)}(self):']
+        lines = [f'\n    def {_camelCase_to_snake_case(f_name)}(self, dero_deposit: int = 0, asset_deposit: int = 0):']
     else:
-        lines = [f'\n    def {_camelCase_to_snake_case(f_name)}(self, {method_parameters}):']
+        lines = [f'\n    def {_camelCase_to_snake_case(f_name)}(self, {method_parameters}, dero_deposit: int = 0, asset_deposit: int = 0):']
 
     scrpc = [
         '                    "sc_rpc": [',
@@ -194,9 +200,14 @@ def _generate_method_scinvoce(f_name, p):
         '                "id": "1",',
         '                "method": "scinvoke",',
         '                "params": {',
-        '                    "scid": SC.SCID,',
+        f'                    "scid": {class_name}.SCID,',
         '                    "ringsize": 2,',
     ]
+    if f_name != 'Initialize':
+        payload += [
+            '                    "sc_dero_deposit": dero_deposit,',
+            '                    "sc_asset_deposit": asset_deposit,',
+        ]
     payload += scrpc
     payload += [
         '                    ]',
