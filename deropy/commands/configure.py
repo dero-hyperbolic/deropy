@@ -2,6 +2,8 @@ import os
 import click
 import logging
 
+from deropy.utils import initialise_working_directory
+
 
 @click.command('configure')
 def configure():
@@ -13,7 +15,7 @@ def _configure():
 
 
 def _install_autocomplete():
-    os.makedirs(os.path.join(os.path.expanduser('~'), '.deropy'), exist_ok=True)
+    initialise_working_directory()
 
     bashrc_path = os.path.join(os.path.expanduser('~'), '.bashrc')
     if os.path.isfile(bashrc_path):

@@ -22,7 +22,7 @@ class Load(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters["key"]["value"] = kwargs["key"]
-        return self.sc.storage[kwargs["key"]]
+        return self.sc.load(kwargs["key"])
 
 
 def load(key: str):

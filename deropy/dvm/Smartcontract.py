@@ -37,14 +37,23 @@ class SmartContract:
         return cls.instance
 
     def _initialize(self):
-        self.storage = dict()
-        self.memory = dict()
-        self.gasStorage = []
-        self.gasCompute = []
+        SmartContract.storage = dict()
+        SmartContract.memory = dict()
+        SmartContract.gasStorage = []
+        SmartContract.gasCompute = []
 
         # At first instanciaion, create the smart-contract Id
         if SmartContract.scid is None:
             SmartContract.scid = sha256(str(time.time()*2).encode()).hexdigest()
+
+    def read(self):
+        return SmartContract.storage
+
+    def store(self, key, value):
+        SmartContract.storage[key] = value
+
+    def load(self, key):
+        return SmartContract.storage[key]
 
     @staticmethod
     def send_dero_with_tx(amount):

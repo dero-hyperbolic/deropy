@@ -12,7 +12,7 @@ class Store(Function):
     def _exec(self, *args, **kwargs):
         self.parameters["key"]["value"] = kwargs["key"]
         self.parameters["value"]["value"] = kwargs["value"]
-        self.sc.storage[kwargs["key"]] = kwargs["value"]
+        self.sc.store(kwargs["key"], kwargs["value"])
 
     def _computeGasStorageCost(self):
         if isinstance(self.parameters["value"]["value"], int):

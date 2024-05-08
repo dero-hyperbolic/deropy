@@ -1,14 +1,28 @@
-from deropy.dvm.Smartcontract import SmartContract
-from deropy.dvm.Wallet import WalletSimulator, Wallet
-from deropy.python_templates.Nameservice import NameService
+from deropy.dvm.Wallet import WalletSimulator
+from deropy.dvm.tester import simulator_setup
 
-# configure the test scenario
-wl_hyperbolic: Wallet = WalletSimulator.create_wallet('hyperbolic')
-wl_new: Wallet = WalletSimulator.create_wallet('new_owner')
-wl_random: Wallet = WalletSimulator.create_wallet('random_user')
-wl_fixed: Wallet = WalletSimulator.create_wallet_from_public_key('hardcoded', 'deto1qyvyeyzrcm2fzf6kyq7egkes2ufgny5xn77y6typhfx9s7w3mvyd5qqynr5hx')
 
-sc = NameService()
+# By default there is two global variables created by the simulator_setup fixture
+# simulator: boolean that indicates if the tests are running in a simulator
+# SmartContract: the class of the smart contract
+
+# The function simulator_setup has to be called with a function that setups the wallets
+# its role is to ensure that the wallets are associated with the simulator json_rpc endpoints to
+# correspond to the wallets already created in the simulator
+
+
+global simulator, SmartContract
+simulator = False
+SmartContract = None
+
+
+# call the simulator_setup fixture to setup the simulator
+simulator, SmartContract = simulator_setup('deropy.python_templates.Nameservice', 'NameService')
+wl_hyperbolic = WalletSimulator.create_wallet('hyperbolic', simulator)
+wl_new = WalletSimulator.create_wallet('new_owner', simulator)
+wl_random = WalletSimulator.create_wallet('random_user', simulator)
+wl_hardcoded = WalletSimulator.create_wallet_from_public_key('hardcoded', 'deto1qyvyeyzrcm2fzf6kyq7egkes2ufgny5xn77y6typhfx9s7w3mvyd5qqynr5hx')
+sc = SmartContract()
 
 
 class TestNameService:
@@ -18,12 +32,14 @@ class TestNameService:
     # Test the Register function
     def test_register_too_short_name(self):
         wl_hyperbolic.invoke_sc_function(sc.Register, "test")
-        assert "test" not in SmartContract.get_instance().storage
+        current_storage = sc.read()
+        assert "test" not in current_storage
 
     def test_register(self):
         wl_hyperbolic.invoke_sc_function(sc.Register, "hyperbolic")
-        assert "hyperbolic" in SmartContract.get_instance().storage
-        assert SmartContract.get_instance().storage["hyperbolic"] == wl_hyperbolic.raw_address
+        current_storage = sc.read()
+        assert "hyperbolic" in current_storage
+        assert current_storage["hyperbolic"] == wl_hyperbolic.raw_address
 
     def test_register_name_already_exists(self):
         wl_random.invoke_sc_function(sc.Register, "hyperbolic")
