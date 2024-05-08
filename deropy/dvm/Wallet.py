@@ -10,6 +10,8 @@ class Wallet:
         self.name = name
         self.id = id
         self.simulator = simulator
+        wallet_port = 30000 + self.id
+        self.rpc_host = f'http://127.0.0.1:{wallet_port}/json_rpc'
 
         if not simulator:
             self._python_init()
@@ -29,21 +31,16 @@ class Wallet:
         self.balance = {}
 
     def _get_string_address(self):
-        time.sleep(2)
-        wallet_port = 30000 + self.id
-        url = f'http://127.0.0.1:{wallet_port}/json_rpc'
         payload = {
             "jsonrpc": "2.0",
             "id": "1",
             "method": "GetAddress"
         }
-        response = requests.post(url, json=payload).json()
+        response = requests.post(self.rpc_host, json=payload).json()
         return response['result']['address']
 
     def _get_raw_address(self):
         def register(self, timeout=0):
-            wallet_port = 30000 + self.id
-            url = f'http://127.0.0.1:{wallet_port}/json_rpc'
             payload = {
                 "jsonrpc": "2.0",
                 "id": "1",
@@ -65,7 +62,7 @@ class Wallet:
                     ]
                 }
             }
-            response = requests.post(url, json=payload).json()
+            response = requests.post(self.rpc_host, json=payload).json()
             
             if "error" in response:
                 waiting_time = 5
@@ -108,19 +105,17 @@ class Wallet:
         if asset_deposit is not None:
             SmartContract.send_asset_with_tx(asset_deposit[0], asset_deposit[1])
 
-        if func_args is None:
-            result = func()
-        else:
-            if not isinstance(func_args, (tuple, list)):
-                func_args = (func_args,)
-
-            result = func(*func_args)
+        # Prepare the SC function parameters (can change if running in simulator)
+        args = [] if func_args is None else (func_args, ) if isinstance(func_args, (int, str)) else func_args
+        kwargs = {'dero_deposit': dero_deposit, 'asset_deposit': asset_deposit, 'host': self.rpc_host}
 
         if self.simulator:
+            result = func(*args, **kwargs)
             print('in simulator, waiting 2 seconds to simulate transaction')
             time.sleep(2)
-        
-        return result
+            return result
+
+        return func(*args)
 
     def get_balance(self, token):
         return self.balance.get(token, 0)
