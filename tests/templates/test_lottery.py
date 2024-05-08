@@ -3,7 +3,6 @@ import sys, os
 import pprint
 
 
-from deropy.dvm.Smartcontract import SmartContract
 from deropy.dvm.Wallet import WalletSimulator, Wallet
 
 # if API_PATH environment variable is set, we need to import the API
