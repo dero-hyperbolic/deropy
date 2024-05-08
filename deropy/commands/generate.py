@@ -181,9 +181,9 @@ def _generate_method_scinvoce(f_name, p, class_name):
     method_parameters = method_parameters[:-2]
 
     if len(method_parameters) == 0:
-        lines = [f'\n    def {f_name}(self, dero_deposit: int = 0, asset_deposit: int = 0):']
+        lines = [f'\n    def {f_name}(self, dero_deposit: int = 0, asset_deposit: int = 0, host: str = None):']
     else:
-        lines = [f'\n    def {f_name}(self, {method_parameters}, dero_deposit: int = 0, asset_deposit: int = 0):']
+        lines = [f'\n    def {f_name}(self, {method_parameters}, dero_deposit: int = 0, asset_deposit: int = 0, host: str = None):']
 
     scrpc = [
         '                    "sc_rpc": [',
@@ -224,8 +224,13 @@ def _generate_method_scinvoce(f_name, p, class_name):
         '            }',
     ]
     lines.extend(payload)
-    lines += ['        response = requests.post(self.url, data=json.dumps(payload), headers=self.headers)']
-    lines += ['        print(response.json())']
+    lines += [
+        '        import pprint',
+        '        pprint.pprint(payload)',
+        '        url = self.url if host is None else host',
+        '        print(f"using url {url}")',
+        '        response = requests.post(url, data=json.dumps(payload), headers=self.headers)',
+        '        pprint.pprint(response.json())']
     return lines
 
 
