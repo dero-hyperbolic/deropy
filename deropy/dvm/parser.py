@@ -18,9 +18,20 @@ def file_to_iast(path):
         code = f.readlines()
 
     # remove all lines that are comments, or imports
-    code = [line for line in code if not line.startswith(
-        "#") and not line.startswith("import") and not line.startswith("from")]
+    code = [line for line in code if not line.startswith("#") and not line.startswith("import") and not line.startswith("from")]
     code = [line for line in code if line.strip() != ""]
+
+    # remove all str( ... ) call but keep what's inside the parenthesis
+    i = 0
+    while i < len(code):
+        line = code[i]
+        if 'str(' in line:
+            start = line.index('str(')
+            end = line.index(')', start)
+            inside = line[start+4:end]
+            code[i] = line[:start] + inside + line[end+1:]
+        i += 1
+
     code = "".join(code)
     tree = ast.parse(code)
 
