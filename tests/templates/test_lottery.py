@@ -41,12 +41,8 @@ class TestLottery:
         assert current_storage['owner'] == wl_hyperbolic.raw_address
 
     def test_lottery(self):
-        print('-----------------------------------------------------------------------------------------')
         wl_hyperbolic.invoke_sc_function(sc.Lottery, 1000)
         current_storage = sc.read()
-        print('Current storage:')
-        pprint.pprint(current_storage)
-        print('-----------------------------------------------------------------------------------------')
         assert current_storage['deposit_count'] == 1
         assert current_storage['deposit_total'] == 1000
         assert current_storage['depositor_address1']

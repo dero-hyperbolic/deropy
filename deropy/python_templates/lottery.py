@@ -18,7 +18,7 @@ class Lottery(SmartContract):
         deposit_count: int = load("deposit_count") + 1
         if val == 0:
             return 0
-        store('depositor_address' + deposit_count, signer())
+        store('depositor_address' + str(deposit_count), signer())
         store('deposit_total', load('deposit_total') + val)
         store('deposit_count', deposit_count)
 
