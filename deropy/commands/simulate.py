@@ -74,6 +74,9 @@ def _simulate(simulator, sc_file, tests_file):
     _generate(transpile_path, txid, 'simulator', api_path)
 
     # Execute the tests in the simulator
+    t = threading.Thread(target=stream_output, args=(q,))
+    t.daemon = True
+    t.start()
     print('Executing the tests')
     os.environ['API_PATH'] = f"{api_path}"
     pytest.main([tests_file, '-vxs'])
