@@ -1,12 +1,26 @@
-from deropy.dvm.Smartcontract import SmartContract
-from deropy.dvm.Wallet import WalletSimulator, Wallet
-from deropy.python_templates.token import Token
+from deropy.dvm.Wallet import WalletSimulator
+from deropy.dvm.tester import simulator_setup
 
-# configure the test scenario
-wl_hyperbolic: Wallet = WalletSimulator.create_wallet('hyperbolic')
-wl_random: Wallet = WalletSimulator.create_wallet('random_user')
 
-sc = Token()
+# By default there is two global variables created by the simulator_setup fixture
+# simulator: boolean that indicates if the tests are running in a simulator
+# SmartContract: the class of the smart contract
+
+# The function simulator_setup has to be called with a function that setups the wallets
+# its role is to ensure that the wallets are associated with the simulator json_rpc endpoints to
+# correspond to the wallets already created in the simulator
+
+
+global simulator, SmartContract
+simulator = False
+SmartContract = None
+
+
+# call the simulator_setup fixture to setup the simulator
+simulator, SmartContract = simulator_setup('deropy.python_templates.token', 'Token')
+wl_hyperbolic = WalletSimulator.create_wallet('hyperbolic', simulator)
+wl_random = WalletSimulator.create_wallet('random_user', simulator)
+sc = SmartContract()
 
 
 class TestNameService:

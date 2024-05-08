@@ -1,28 +1,27 @@
-import importlib
-import sys, os
-import pprint
+from deropy.dvm.Wallet import WalletSimulator
+from deropy.dvm.tester import simulator_setup
 
 
-from deropy.dvm.Wallet import WalletSimulator, Wallet
+# By default there is two global variables created by the simulator_setup fixture
+# simulator: boolean that indicates if the tests are running in a simulator
+# SmartContract: the class of the smart contract
 
-# if API_PATH environment variable is set, we need to import the API
+# The function simulator_setup has to be called with a function that setups the wallets
+# its role is to ensure that the wallets are associated with the simulator json_rpc endpoints to
+# correspond to the wallets already created in the simulator
+
+
+global simulator, SmartContract
 simulator = False
-if 'API_PATH' in os.environ:
-    sys.path.append(os.path.dirname(os.environ['API_PATH']))
+SmartContract = None
 
-    # Import the class Lottery from the file loterry_api.py
-    module = importlib.import_module(os.path.basename(os.environ['API_PATH']).split('.')[0])
-    Lottery = getattr(module, 'Lottery')
-    simulator = True
-else:
-    from deropy.python_templates.lottery import Lottery
 
-# Configure the test scenario
-wl_hyperbolic: Wallet = WalletSimulator.create_wallet('hyperbolic', simulator)
-wl_new: Wallet = WalletSimulator.create_wallet('new_owner', simulator)
-wl_random: Wallet = WalletSimulator.create_wallet('random_user', simulator)
-
-sc = Lottery()
+# call the simulator_setup fixture to setup the simulator
+simulator, SmartContract = simulator_setup('deropy.python_templates.lottery', 'Lottery')
+wl_hyperbolic = WalletSimulator.create_wallet('hyperbolic', simulator)
+wl_new = WalletSimulator.create_wallet('new_owner', simulator)
+wl_random = WalletSimulator.create_wallet('random_user', simulator)
+sc = SmartContract()
 
 
 class TestLottery:

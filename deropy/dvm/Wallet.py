@@ -91,7 +91,7 @@ class Wallet:
 
     @classmethod
     def from_public_key(cls, public_key):
-        wallet = cls(public_key)
+        wallet = cls(public_key, 1000)
         wallet.string_address = public_key
         wallet.raw_address = public_key[:33]
         return wallet
