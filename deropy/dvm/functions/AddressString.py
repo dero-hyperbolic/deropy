@@ -1,5 +1,5 @@
 from deropy.dvm.functions.Function import Function
-from deropy.dvm.Wallet import WalletSimulator
+from deropy.wallet.wallet_simulator import WalletSimulator
 
 
 class AddressString(Function):

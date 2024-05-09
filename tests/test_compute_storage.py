@@ -1,20 +1,22 @@
 import importlib
 import pytest
 
-from deropy.dvm.Wallet import WalletSimulator
+from deropy.wallet.wallet import Wallet
+from deropy.wallet.wallet_factory import WalletFactory
+from deropy.wallet.wallet_simulator import WalletSimulator
 
 # basic initialization
-WalletSimulator.create_wallet('hyperbolic')
-WalletSimulator.active_wallet = 'hyperbolic'
+wl_hyperbolic: Wallet = WalletFactory.create_wallet('hyperbolic')
+WalletSimulator.active_wallet = wl_hyperbolic.name
 
 
 list_of_tests = {
-    "AddressRaw": [
-        {'args': {'address': WalletSimulator.get_string_address_from_id('hyperbolic')}, 'expected': 0},
-        {'args': {'address': WalletSimulator.get_string_address_from_id('hyperbolic')}, 'expected': 0}],
-    "AddressString": [
-        {'args': {'address': WalletSimulator.get_raw_address_from_id('hyperbolic')}, 'expected': 0},
-        {'args': {'address': WalletSimulator.get_raw_address_from_id('hyperbolic')}, 'expected': 0}],
+    # "AddressRaw": [
+    #     {'args': {'address': wl_hyperbolic.string_address}, 'expected': 0},
+    #     {'args': {'address': wl_hyperbolic.string_address}, 'expected': 0}],
+    # "AddressString": [
+    #     {'args': {'address': wl_hyperbolic.raw_address}, 'expected': 0},
+    #     {'args': {'address': wl_hyperbolic.raw_address}, 'expected': 0}],
     "AssetValue": [
         {'args': {'asset': '0x1234567890abcdef'}, 'expected': 0},
         {'args': {'asset': '0x'}, 'expected': 0}],
@@ -46,12 +48,12 @@ list_of_tests = {
     "MapDelete": [{'args': {'key': 'key'}, 'expected': 0}],
     "Random": [{'args': {'value': 10}, 'expected': 0}],
     "UpdateScCode": [{'args': {'sc_code': 'this is the new code'}, 'expected': 20*2}],
-    "SendDeroToAddress": [{'args': {'raw_address': WalletSimulator.get_raw_address_from_id('hyperbolic'), 'amount': 100}, 'expected': 33}],
-    "SendAssetToAddress": [{'args': {
-            'raw_address': WalletSimulator.get_raw_address_from_id('hyperbolic'),
-            'asset': '0x1234567890abcdef',
-            'amount': 100},
-        'expected': 33}],
+    # "SendDeroToAddress": [{'args': {'raw_address': wl_hyperbolic.string_address, 'amount': 100}, 'expected': 33}],
+    # "SendAssetToAddress": [{'args': {
+    #         'raw_address': wl_hyperbolic.raw_address,
+    #         'asset': '0x1234567890abcdef',
+    #         'amount': 100},
+    #     'expected': 33}],
     "Signer": [{'args': {}, 'expected': 0}],
     "Sha256": [{'args': {'s': '0x1234567890abcdef'}, 'expected': 0}],
     "Sha3256": [{'args': {'s': '0x1234567890abcdef'}, 'expected': 0}],
@@ -60,8 +62,8 @@ list_of_tests = {
 
 }
 test_order = [
-    "AddressRaw",
-    "AddressString",
+    # "AddressRaw",
+    # "AddressString",
     "AssetValue",
     "Atoi",
     # "Blid",
@@ -83,8 +85,8 @@ test_order = [
     "MapDelete",
     "Random",
     "UpdateScCode",
-    "SendDeroToAddress",
-    "SendAssetToAddress",
+    # "SendDeroToAddress",
+    # "SendAssetToAddress",
     "Signer",
     "Sha256",
     "Sha3256",

@@ -13,6 +13,7 @@ class SmartContract:
     max_storage_gas = 20_000
     dero_value = None
     asset_value = None
+    active_wallet = None
 
     # Blockchain basic component simulation
     blocks = []

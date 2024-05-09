@@ -1,5 +1,6 @@
 from deropy.dvm.functions.Function import Function
-from deropy.dvm.Wallet import WalletSimulator, Wallet
+from deropy.wallet.wallet_simulator import WalletSimulator
+from deropy.wallet.wallet import Wallet
 
 
 class SendDeroToAddress(Function):

@@ -1,13 +1,14 @@
-from deropy.dvm.Smartcontract import SmartContract
-from deropy.dvm.Wallet import WalletSimulator, Wallet
-from deropy.python_templates.minimum_sc import Minimal
+from deropy.wallet.wallet_factory import WalletFactory
+from deropy.wallet.wallet import Wallet
+from deropy.dvm.tester import simulator_setup
 
 # Let define three wallets
-wl_hyperbolic: Wallet = WalletSimulator.create_wallet('hyperbolic')
-wl_new: Wallet = WalletSimulator.create_wallet('new_owner')
-wl_random: Wallet = WalletSimulator.create_wallet('random_user')
+simulator, SmartContract = simulator_setup('deropy.python_templates.minimum_sc', 'Minimal')
+wl_hyperbolic: Wallet = WalletFactory.create_wallet('hyperbolic')
+wl_new: Wallet = WalletFactory.create_wallet('new_owner')
+wl_random: Wallet = WalletFactory.create_wallet('random_user')
 
-sc = Minimal()
+sc = SmartContract()
 
 
 class TestMinimumSC:
