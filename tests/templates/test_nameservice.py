@@ -1,6 +1,6 @@
-from deropy.wallet import WalletSimulator
+from deropy.wallet.wallet_factory import WalletFactory
+from deropy.wallet.wallet import Wallet
 from deropy.dvm.tester import simulator_setup
-
 
 # By default there is two global variables created by the simulator_setup fixture
 # simulator: boolean that indicates if the tests are running in a simulator
@@ -18,10 +18,10 @@ SmartContract = None
 
 # call the simulator_setup fixture to setup the simulator
 simulator, SmartContract = simulator_setup('deropy.python_templates.Nameservice', 'NameService')
-wl_hyperbolic = WalletSimulator.create_wallet('hyperbolic', simulator)
-wl_new = WalletSimulator.create_wallet('new_owner', simulator)
-wl_random = WalletSimulator.create_wallet('random_user', simulator)
-wl_hardcoded = WalletSimulator.create_wallet_from_public_key('hardcoded', 'deto1qyvyeyzrcm2fzf6kyq7egkes2ufgny5xn77y6typhfx9s7w3mvyd5qqynr5hx')
+wl_hyperbolic: Wallet = WalletFactory.create_wallet('hyperbolic', simulator)
+wl_new: Wallet = WalletFactory.create_wallet('new_owner', simulator)
+wl_random: Wallet = WalletFactory.create_wallet('random_user', simulator)
+wl_hardcoded: Wallet = WalletFactory.create_wallet_from_public_key('hardcoded', 'deto1qyvyeyzrcm2fzf6kyq7egkes2ufgny5xn77y6typhfx9s7w3mvyd5qqynr5hx')
 sc = SmartContract()
 
 

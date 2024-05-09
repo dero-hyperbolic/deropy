@@ -30,8 +30,8 @@ class PythonWallet(Wallet):
         super().invoke_sc_function(func, func_args, dero_deposit, asset_deposit)
 
         # Wallet balance is consumed the dero or / and asset deposit
-        if dero_deposit is not None:
-            self.balance["DERO"] -= dero_deposit
+        # if dero_deposit is not None:
+        #     self.balance["DERO"] -= dero_deposit
         if asset_deposit is not None:
             self.balance[SmartContract.scid] -= asset_deposit[0]
 
