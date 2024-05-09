@@ -1,16 +1,22 @@
 import click
 
+from deropy.logger import init_logger, change_logger_level
 from deropy.commands.configure import configure
 from deropy.commands.generate import generate
 from deropy.commands.deploy import deploy
 from deropy.commands.simulate import simulate
 from deropy.commands.transpile import transpile
 
+init_logger('deropy')
 
 @click.group('deropy')
 @click.version_option()
-def deropy():
-    pass
+@click.option('-v', '--verbose', count=True)
+def deropy(verbose: int):
+    if verbose == 1:
+        change_logger_level('deropy', 'INFO')
+    elif verbose > 1:
+        change_logger_level('deropy', 'DEBUG')
 
 
 deropy.add_command(generate)

@@ -47,18 +47,9 @@ def _simulate(simulator, sc_file, tests_file):
     smart_contract_name = os.path.basename(sc_file).split('.')[0].lower()
     transpile_path = os.path.join(get_working_directory(), f'{smart_contract_name}.bas')
     api_path = os.path.join(get_working_directory(), f'{smart_contract_name}_api.py')
-
-    # Execute the DEROHE Simualtor
-    # We do it into a thread because we don't want to block the main thread
-    # We need to read the output from the simulator to know when it is ready to receive requests
-    # Read the output from the simulator until the Listening for requests message is displayed
-    print('Executing the DEROHE simulator')
-    p = subprocess.Popen([simulator], stdout=subprocess.PIPE, bufsize=1, close_fds=ON_POSIX)
     q = Queue()
-    t = threading.Thread(target=enqueue_output, args=(p.stdout, q))
-    t.daemon = True
-    t.start()
-    read_until(q, 'Listening for requests')
+
+    start_derohe_simulator(simulator, q)
 
     # Transpile the python smart-contract into a DEROHE smart-contract
     print('Transpiling the smart contract')
@@ -74,9 +65,6 @@ def _simulate(simulator, sc_file, tests_file):
     _generate(transpile_path, txid, 'simulator', api_path)
 
     # Execute the tests in the simulator
-    t = threading.Thread(target=stream_output, args=(q,))
-    t.daemon = True
-    t.start()
     print('Executing the tests')
     os.environ['API_PATH'] = f"{api_path}"
     pytest.main([tests_file, '-vxs'])
@@ -84,15 +72,29 @@ def _simulate(simulator, sc_file, tests_file):
     # Finish reading the output from the simulator
     read_until_empty(q)
 
-    # Close the simulator
-    p.terminate()
-    p.wait()
+
+def start_derohe_simulator(simulator, q):
+    # We do it into a thread because we don't want to block the main thread
+    # We need to read the output from the simulator to know when it is ready to receive requests
+    # Read the output from the simulator until the Listening for requests message is displayed
+    print('Executing the DEROHE simulator')
+    p = subprocess.Popen([simulator], stdout=subprocess.PIPE, bufsize=1, close_fds=ON_POSIX)
+    t = threading.Thread(target=enqueue_output, args=(p.stdout, q))
+    t.daemon = True
+    t.start()
+    read_until(q, 'Listening for requests')
 
 
 def enqueue_output(out, queue):
     for line in iter(out.readline, b''):
         queue.put(line)
     out.close()
+
+
+def start_output_stream(q):
+    t = threading.Thread(target=stream_output, args=(q,))
+    t.daemon = True
+    t.start()
 
 
 def stream_output(queue):

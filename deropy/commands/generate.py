@@ -225,12 +225,9 @@ def _generate_method_scinvoce(f_name, p, class_name):
     ]
     lines.extend(payload)
     lines += [
-        '        import pprint',
-        '        pprint.pprint(payload)',
         '        url = self.url if host is None else host',
-        '        print(f"using url {url}")',
-        '        response = requests.post(url, data=json.dumps(payload), headers=self.headers)',
-        '        pprint.pprint(response.json())']
+        '        response = requests.post(url, data=json.dumps(payload), headers=self.headers)'
+    ]
     return lines
 
 
@@ -282,7 +279,6 @@ def _generate_method_transfer2(f_name, p):
     ]
     lines.extend(payload)
     lines += ['        response = requests.post(self.url, data=json.dumps(payload), headers=self.headers)']
-    lines += ['        print(response.json())']
     return lines
 
 

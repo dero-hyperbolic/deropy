@@ -1,4 +1,4 @@
-from deropy.dvm.functions import exists, store, load, signer, random, send_dero_to_address, address_raw, update_sc_code
+from deropy.dvm.functions import exists, store, derovalue, load, signer, random, send_dero_to_address, address_raw, update_sc_code
 from deropy.dvm.Smartcontract import SmartContract, logger, sc_logger
 
 
@@ -18,6 +18,10 @@ class Lottery(SmartContract):
         deposit_count: int = load("deposit_count") + 1
         if val == 0:
             return 0
+
+        if val > derovalue():
+            return 1
+
         store('depositor_address' + str(deposit_count), signer())
         store('deposit_total', load('deposit_total') + val)
         store('deposit_count', deposit_count)

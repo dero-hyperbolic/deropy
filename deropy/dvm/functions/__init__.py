@@ -20,8 +20,8 @@ from .AddressRaw import address_raw
 from .AddressString import address_string
 from .SendDeroToAddress import send_dero_to_address
 from .SendAssetToAddress import send_asset_to_address
-from .DeroValue import dero_value
-from .AssetValue import asset_value
+from .DeroValue import derovalue
+from .AssetValue import assetvalue
 from .Atoi import atoi
 from .Itoa import itoa
 from .Sha256 import sha256
@@ -56,8 +56,8 @@ __all__ = [
     address_string,
     send_dero_to_address,
     send_asset_to_address,
-    dero_value,
-    asset_value,
+    derovalue,
+    assetvalue,
     atoi,
     itoa,
     sha256,

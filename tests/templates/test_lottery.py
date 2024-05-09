@@ -39,12 +39,18 @@ class TestLottery:
         current_storage = sc.read()
         assert current_storage['owner'] == wl_hyperbolic.raw_address
 
-    def test_lottery(self):
+    def test_lottery_not_enough_deposit(self):
         wl_hyperbolic.invoke_sc_function(sc.Lottery, 1000)
+        current_storage = sc.read()
+        assert current_storage['deposit_count'] == 0
+        assert current_storage['deposit_total'] == 0
+        assert 'depositor_address1' not in current_storage
+
+    def test_lottery_enough_deposit(self):
+        wl_hyperbolic.invoke_sc_function(sc.Lottery, 1000, dero_deposit=1000)
         current_storage = sc.read()
         assert current_storage['deposit_count'] == 1
         assert current_storage['deposit_total'] == 1000
-        assert current_storage['depositor_address1']
         assert current_storage['depositor_address1'] == wl_hyperbolic.raw_address
 
     def test_tune_owner(self):
