@@ -1,12 +1,17 @@
 import hashlib
 import requests
 import time
+import logging
+
+
+from deropy.utils import active_waiting
 from deropy.dvm.Smartcontract import SmartContract
 
 
 class Wallet:
     def __init__(self, name, id, simulator: bool = False):
-        print(f'Creating wallet "{name}" (simulator: {simulator})')
+        self.logger = logging.getLogger('deropy')
+        self.logger.info(f'Creating wallet "{name}" (simulator: {simulator})')
         self.name = name
         self.id = id
         self.simulator = simulator
@@ -27,7 +32,7 @@ class Wallet:
         self.string_address = self._get_string_address()
         self.raw_address = self._get_raw_address()
 
-        print(f'Wallet "{self.name}" created: {self.string_address} - {self.raw_address} - "{self.name}')
+        self.logger.info(f'Wallet "{self.name}" created: {self.string_address} - {self.raw_address} - "{self.name}')
         self.balance = {}
 
     def _get_string_address(self):
@@ -63,7 +68,7 @@ class Wallet:
                 }
             }
             response = requests.post(self.rpc_host, json=payload).json()
-            
+
             if "error" in response:
                 waiting_time = 5
                 active_waiting(f'Wallet not yet registered, trying again in {waiting_time}', waiting_time)
@@ -97,7 +102,7 @@ class Wallet:
         return wallet
 
     def invoke_sc_function(self, func, func_args: tuple = None, dero_deposit: int = None, asset_deposit: tuple = None):
-        print(f'Invoking function "{func.__name__}({func_args})" in wallet "{self.name}" using {dero_deposit} DERO and {asset_deposit} assets')
+        self.logger.info(f'Invoking function "{func.__name__}({func_args})" in wallet "{self.name}" using {dero_deposit} DERO and {asset_deposit} assets')
         WalletSimulator.active_wallet = self.name
 
         if dero_deposit is not None:
@@ -111,7 +116,7 @@ class Wallet:
 
         if self.simulator:
             result = func(*args, **kwargs)
-            print('in simulator, waiting 2 seconds to simulate transaction')
+            self.logger.debug('in simulator, waiting 2 seconds to simulate transaction')
             time.sleep(2)
             return result
 
@@ -133,7 +138,7 @@ class WalletSimulator:
     def create_wallet(name, simulator: bool = False):
         if WalletSimulator.wallet_count >= 20:
             raise Exception("Maximum number of wallets reached")
-        
+
         WalletSimulator.wallets[name] = Wallet(name, WalletSimulator.wallet_count, simulator)
         WalletSimulator.wallet_count += 1
         return WalletSimulator.wallets[name]
@@ -155,12 +160,12 @@ class WalletSimulator:
             if wallet.raw_address == raw_address:
                 return id
         raise Exception("Wallet not found")
-    
+
     @staticmethod
     def get_wallet_from_raw(raw_address):
         id = WalletSimulator.find_wallet_id_from_raw(raw_address)
         return WalletSimulator.get_wallet_from_id(id)
-    
+
     @staticmethod
     def get_wallet_from_id(id):
         return WalletSimulator.wallets[id]
@@ -183,13 +188,3 @@ class WalletSimulator:
     @staticmethod
     def is_initialized():
         return WalletSimulator.active_wallet is not None
-    
-
-def active_waiting(msg: str, timeout: int):
-    start = time.time()
-
-    while time.time() - start < timeout:
-        for char in ['|', '/', '-', '\\']:
-            print(f'{msg} {char}', end='\r')
-            time.sleep(0.1)
-    print('')
