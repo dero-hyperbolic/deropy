@@ -1,6 +1,7 @@
 import hashlib
 
 
+from deropy.dvm.Smartcontract import SmartContract
 from deropy.wallet.wallet import Wallet
 
 
@@ -27,6 +28,18 @@ class PythonWallet(Wallet):
 
     def invoke_sc_function(self, func, func_args: tuple = None, dero_deposit: int = None, asset_deposit: tuple = None):
         super().invoke_sc_function(func, func_args, dero_deposit, asset_deposit)
-        
+
+        # Wallet balance is consumed the dero or / and asset deposit
+        if dero_deposit is not None:
+            self.balance["DERO"] -= dero_deposit
+        if asset_deposit is not None:
+            self.balance[SmartContract.scid] -= asset_deposit[0]
+
         args = [] if func_args is None else (func_args, ) if isinstance(func_args, (int, str)) else func_args
-        return func(*args)
+        result = func(*args)
+
+        # deposit is burned by the smart-contract
+        SmartContract.dero_value = None
+        SmartContract.asset_value = None
+
+        return result
