@@ -2,6 +2,11 @@ import pytest
 
 from deropy.dvm.functions import map_store, map_get, map_delete, map_exists
 from deropy.dvm.Smartcontract import SmartContract
+from deropy.wallet.wallet import Wallet
+from deropy.wallet.wallet_factory import WalletFactory
+
+# basic initialization
+wl_hyperbolic: Wallet = WalletFactory.create_wallet('hyperbolic')
 
 
 class TestMapStore:
