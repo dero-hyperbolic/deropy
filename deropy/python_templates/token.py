@@ -1,4 +1,4 @@
-from deropy.dvm.functions import exists, store, load, dero_value, asset_value, signer, address_raw, send_dero_to_address
+from deropy.dvm.functions import exists, store, load, derovalue, assetvalue, signer, address_raw, send_dero_to_address
 from deropy.dvm.functions import send_asset_to_address, scid
 from deropy.dvm.Smartcontract import SmartContract, logger, sc_logger
 
@@ -14,11 +14,11 @@ class Token(SmartContract):
             return 1
 
     def IssueTokenX(self) -> int:
-        send_asset_to_address(signer(), dero_value(), scid())
+        send_asset_to_address(signer(), derovalue(), scid())
         return 0
 
     def ConvertTokenX(self) -> int:
-        send_dero_to_address(signer(), asset_value(scid()))
+        send_dero_to_address(signer(), assetvalue(scid()))
         return 0
 
     def TransferOwnership(self, new_owner: str) -> int:
@@ -34,4 +34,3 @@ class Token(SmartContract):
 
         store('owner', signer())
         return 0
-

@@ -5,7 +5,7 @@ from deropy.dvm.Smartcontract import SmartContract
 class DeroValue(Function):
     def __init__(self):
         func_parameters = {}
-        super().__init__("dero_value", 10_000, 0, func_parameters)
+        super().__init__("derovalue", 10_000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
         if SmartContract.dero_value is None:
@@ -18,5 +18,5 @@ class DeroValue(Function):
         return 0
 
 
-def dero_value():
+def derovalue():
     return DeroValue()()

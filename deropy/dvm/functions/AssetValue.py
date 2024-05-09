@@ -7,7 +7,7 @@ class AssetValue(Function):
         func_parameters = {
             "asset": {"type": "str", "value": None},
         }
-        super().__init__("asset_value", 10_000, 0, func_parameters)
+        super().__init__("assetvalue", 10_000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
         asset_id = kwargs["asset"]
@@ -24,5 +24,5 @@ class AssetValue(Function):
         return 0
 
 
-def asset_value(asset: str):
+def assetvalue(asset: str):
     return AssetValue()(asset=asset)
