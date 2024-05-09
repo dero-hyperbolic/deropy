@@ -1,4 +1,4 @@
-from deropy.dvm.Wallet import WalletSimulator
+from deropy.wallet import WalletSimulator
 from deropy.dvm.tester import simulator_setup
 
 

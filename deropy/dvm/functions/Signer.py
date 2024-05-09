@@ -1,5 +1,5 @@
 from deropy.dvm.functions.Function import Function
-from deropy.dvm.Wallet import WalletSimulator
+from deropy.wallet.wallet_simulator import WalletSimulator
 
 
 class Signer(Function):
@@ -13,7 +13,7 @@ class Signer(Function):
         if WalletSimulator.active_wallet is None:
             raise Exception("No active wallet")
 
-        return WalletSimulator.get_raw_address()
+        return WalletSimulator.active_wallet.raw_address
 
     def _computeGasStorageCost(self):
         return 0

@@ -1,4 +1,5 @@
-from deropy.dvm.Wallet import WalletSimulator
+from deropy.wallet.wallet_factory import WalletFactory
+from deropy.wallet.wallet import Wallet
 from deropy.dvm.tester import simulator_setup
 
 
@@ -18,9 +19,9 @@ SmartContract = None
 
 # call the simulator_setup fixture to setup the simulator
 simulator, SmartContract = simulator_setup('deropy.python_templates.lottery', 'Lottery')
-wl_hyperbolic = WalletSimulator.create_wallet('hyperbolic', simulator)
-wl_new = WalletSimulator.create_wallet('new_owner', simulator)
-wl_random = WalletSimulator.create_wallet('random_user', simulator)
+wl_hyperbolic: Wallet = WalletFactory.create_wallet('hyperbolic', simulator)
+wl_new: Wallet = WalletFactory.create_wallet('new_owner', simulator)
+wl_random: Wallet = WalletFactory.create_wallet('random_user', simulator)
 sc = SmartContract()
 
 

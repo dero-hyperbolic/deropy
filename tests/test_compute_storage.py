@@ -1,7 +1,7 @@
 import importlib
 import pytest
 
-from deropy.dvm.Wallet import WalletSimulator
+from deropy.wallet import WalletSimulator
 
 # basic initialization
 WalletSimulator.create_wallet('hyperbolic')
