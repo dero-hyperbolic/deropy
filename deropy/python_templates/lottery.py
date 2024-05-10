@@ -1,5 +1,6 @@
-from deropy.dvm.functions import exists, store, derovalue, load, signer, random, send_dero_to_address, address_raw, update_sc_code
+from deropy.dvm.functions import exists, store, derovalue, load, signer, random, send_dero_to_address, address_raw
 from deropy.dvm.Smartcontract import SmartContract, logger, sc_logger
+from deropy.dvm.std import updateCode
 
 
 @sc_logger(logger)
@@ -62,11 +63,4 @@ class Lottery(SmartContract):
             return 1
 
         send_dero_to_address(signer(), amount)
-        return 0
-
-    def UpdateCode(self, new_code: str) -> int:
-        if load('owner') != signer():
-            return 1
-
-        update_sc_code(new_code)
         return 0
