@@ -3,6 +3,15 @@ import sys
 import os
 
 
+from deropy.wallet.wallet_simulator import WalletSimulator
+from deropy.dvm.Smartcontract import SmartContract
+
+
+def clean_simulator():
+    SmartContract.get_instance()._initialize()
+    WalletSimulator.reset()
+
+
 def simulator_setup(python_sc_path: str, cls_name: str): 
     global simulator, SmartContract
 
