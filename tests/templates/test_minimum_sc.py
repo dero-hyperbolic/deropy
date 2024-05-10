@@ -2,7 +2,7 @@ from deropy.wallet.wallet_factory import WalletFactory
 from deropy.wallet.wallet import Wallet
 from deropy.dvm.tester import simulator_setup
 
-# Let define three wallets
+
 simulator, SmartContract = simulator_setup('deropy.python_templates.minimum_sc', 'Minimal')
 wl_hyperbolic: Wallet = WalletFactory.create_wallet('hyperbolic')
 wl_new: Wallet = WalletFactory.create_wallet('new_owner')
