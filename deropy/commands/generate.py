@@ -107,9 +107,9 @@ def _generate_class(file: str, scid: str, output: str = None):
     lines.extend(_generate_read_method(scid))
     for f, p in functions.items():
         scinvoce_method = _generate_method_scinvoce(f, p, class_name)
-        # transfer2_method = _generate_method_transfer2(f, p)
+        transfer2_method = _generate_method_transfer2(f, p, class_name)
         lines.extend(scinvoce_method)
-        # lines.extend(transfer2_method)
+        lines.extend(transfer2_method)
 
     with open(output_path, 'w') as f:
         for line in lines:
@@ -231,7 +231,7 @@ def _generate_method_scinvoce(f_name, p, class_name):
     return lines
 
 
-def _generate_method_transfer2(f_name, p):
+def _generate_method_transfer2(f_name, p, class_name):
     # create the method definition
     method_parameters = ''
     for k, v in p.items():
@@ -267,7 +267,7 @@ def _generate_method_transfer2(f_name, p):
         '                "id": "1",',
         '                "method": "transfer",',
         '                "params": {',
-        '                    "scid": SC.SCID,',
+        f'                    "scid": {class_name}.SCID,',
         '                    "ringsize": 2,',
         '                    "fees": fee,',
     ]

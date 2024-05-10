@@ -4,6 +4,12 @@ class WalletSimulator:
     wallet_count = 0
 
     @staticmethod
+    def reset():
+        WalletSimulator.active_wallet = None
+        WalletSimulator.wallets = {}
+        WalletSimulator.wallet_count = 0
+
+    @staticmethod
     def find_wallet_id_from_string(string_address):
         for id, wallet in WalletSimulator.wallets.items():
             if wallet.string_address == string_address:

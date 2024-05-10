@@ -1,3 +1,6 @@
+import logging
+
+
 from deropy.wallet.wallet_simulator import WalletSimulator
 from deropy.wallet.derohe_wallet import DeroheWallet
 from deropy.wallet.python_wallet import PythonWallet
@@ -6,6 +9,9 @@ from deropy.wallet.python_wallet import PythonWallet
 class WalletFactory:
     @staticmethod
     def create_wallet(name, simulator: bool = False):
+        if name in WalletSimulator.wallets:
+            return WalletSimulator.wallets[name]
+
         if WalletSimulator.wallet_count >= 20:
             raise Exception("Maximum number of wallets reached")
 
