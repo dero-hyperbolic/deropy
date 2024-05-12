@@ -1,6 +1,6 @@
 from deropy.dvm.functions import store, load
 
 
-def increment(self, key: str, amount: int) -> int:
-    store(key, load(key) + amount)
+def increment(key: str, val: int) -> int:
+    store(key, load(key) + val)
     return 0

@@ -1,7 +1,7 @@
 from deropy.dvm.functions import load, signer, store, exists, strlen, update_sc_code
 
 
-def updateCode(self, newCode: str):
+def updateCode(newCode: str):
     if load('owner') != signer():
         return 1
 
