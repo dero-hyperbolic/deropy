@@ -4,11 +4,11 @@ import deropy.dvm.iast as iast
 
 
 def to_iast(node):
-    if isinstance(node, list):
-        return [to_iast(n) for n in node]
-
     if isinstance(node, ast.ClassDef):
         pass
+
+    if isinstance(node, list):
+        return [to_iast(n) for n in node]
 
     if isinstance(node, ast.If):
         return iast.IfTest.from_python_ast("if", node)
@@ -38,6 +38,9 @@ def to_iast(node):
     if isinstance(node, ast.Expr):
         if isinstance(node.value, ast.Call):
             return iast.FunctionCall.from_python_ast(node.value)
+        if isinstance(node.value, ast.Constant):
+            if isinstance(node.value.value, str):
+                return iast.Comment.from_python_ast(node)
 
     if isinstance(node, ast.FunctionDef):
         body = []
@@ -83,5 +86,11 @@ def to_iast(node):
         return iast.Operator.from_python_ast(node)
     if isinstance(node, ast.Div):
         return iast.Operator.from_python_ast(node)
+    if isinstance(node, ast.BitAnd):
+        return iast.Operator.from_python_ast(node)
+    if isinstance(node, ast.BitOr):
+        return iast.Operator.from_python_ast(node)
 
+    print('Unknown node type:', type(node))
+    print(ast.dump(node))
     raise Exception(f'Unknown node type: {type(node)}')

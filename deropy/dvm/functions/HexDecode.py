@@ -6,7 +6,7 @@ class HexDecode(Function):
         func_parameters = {
             "s": {"type": "str", "value": None},
         }
-        super().__init__("hex_decode", 10_000, 0, func_parameters)
+        super().__init__("hexdecode", 10_000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
         self.parameters["s"]["value"] = kwargs["s"]
@@ -16,5 +16,5 @@ class HexDecode(Function):
         return 0
 
 
-def hex_decode(s: str):
+def hexdecode(s: str):
     return HexDecode()(s=s)

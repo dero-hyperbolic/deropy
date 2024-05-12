@@ -4,13 +4,16 @@ import ast
 import sys
 import os
 
+
 import deropy.dvm.iast.iast_converter as iast_converter
 import deropy.dvm.dast as dast
+import deropy.dvm.std as std
 from deropy.dvm.dast import *
 from deropy.dvm.utils import flatten_list
 
 
 standard_library_functions = []
+header_comment = []
 
 
 def load_dast(str_func_name, obj):
@@ -28,7 +31,8 @@ def load_std_function(import_line):
 
     for func in function_names:
         func = func.strip()
-        std_basic_path = os.path.join('deropy', 'dvm', 'std', 'basic')
+        root_directory = os.path.dirname(inspect.getfile(std))
+        std_basic_path = os.path.join(root_directory, 'basic')
 
         with open(os.path.join(std_basic_path, f'{func}.bas'), 'r') as fi:
             code = fi.readlines()
@@ -61,6 +65,9 @@ def file_to_iast(path):
             code[i] = line[:start] + inside + line[end+1:]
         i += 1
 
+    # remove all the self. from the code
+    code = [line.replace('self.', '') for line in code]
+
     code = "".join(code)
     tree = ast.parse(code)
 
@@ -91,10 +98,15 @@ def parse(path, output_path=None):
     all_functions = []
 
     for f in parsed:
-
+            
         json_function = json.loads(f.to_json())
 
         func = load_dast(json_function["type"], json_function)
+
+        if isinstance(func, Comment):
+            header_comment.append(str(func))
+            continue
+
         flatten_func_body = []
         for b in func.body:
             if isinstance(b, list):
@@ -155,6 +167,10 @@ def parse(path, output_path=None):
         all_functions.append((func, flatten_func_body))
 
     # print the DVM-BASIC code
+    # first the header comment
+    for hc in header_comment:
+        print(hc)
+
     for func_name, func_body in all_functions:
         print(func_name)
         for i, b in enumerate(func_body):
@@ -165,6 +181,10 @@ def parse(path, output_path=None):
         print(''.join(std_func))
 
     with open(output_path, 'w') as f:
+        # first the header comment
+        for hc in header_comment:
+            f.write(hc)
+        f.write('\n')
         for func_name, func_body in all_functions:
             f.write(f'{func_name}\n')
             for i, b in enumerate(func_body):

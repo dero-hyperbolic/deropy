@@ -12,3 +12,4 @@ from .operator import Operator
 from .binaryOperator import BinaryOperator
 from .argument import Argument
 from .whileLoop import WhileLoop
+from .comment import Comment

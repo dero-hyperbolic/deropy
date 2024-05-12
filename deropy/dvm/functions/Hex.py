@@ -16,5 +16,5 @@ class Hex(Function):
         return 0
 
 
-def _hex(s: str):
+def hex(s: str):
     return Hex()(s=s)

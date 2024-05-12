@@ -27,8 +27,8 @@ from .Itoa import itoa
 from .Sha256 import sha256
 from .Sha3256 import sha3256
 from .Keccak256 import keccak256
-from .Hex import _hex
-from .HexDecode import hex_decode
+from .Hex import hex
+from .HexDecode import hexdecode
 from .Strlen import strlen
 from .Substr import substr
 from .Panic import panic
@@ -63,8 +63,8 @@ __all__ = [
     sha256,
     sha3256,
     keccak256,
-    _hex,
-    hex_decode,
+    hex,
+    hexdecode,
     strlen,
     substr,
     panic,
