@@ -17,8 +17,9 @@ class PythonWallet(Wallet):
     def _get_string_address(self):
         return self.string_address
 
-    def _get_raw_address(self):
-        return self.raw_address
+    def get_raw_address(self):
+        # return self.raw_address
+        return "".join("{:02x}".format(c) for c in self.raw_address.encode())
 
     def get_balance(self, token):
         return self.balance.get(token, 0)
@@ -33,7 +34,7 @@ class PythonWallet(Wallet):
         # if dero_deposit is not None:
         #     self.balance["DERO"] -= dero_deposit
         if asset_deposit is not None:
-            self.balance[SmartContract.scid] -= asset_deposit[0]
+            self.balance[SmartContract.SCID] -= asset_deposit[0]
 
         args = [] if func_args is None else (func_args, ) if isinstance(func_args, (int, str)) else func_args
         result = func(*args)

@@ -10,7 +10,7 @@ class Scid(Function):
         super().__init__("scid", 2000, 0, func_parameters)
 
     def _exec(self, *args, **kwargs):
-        value = SmartContract.scid
+        value = SmartContract.SCID
         self.parameters['value']['value'] = value
         return value
 

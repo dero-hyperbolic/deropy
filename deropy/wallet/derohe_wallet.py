@@ -30,6 +30,9 @@ class DeroheWallet(Wallet):
         response = requests.post(self.rpc_host, json=payload).json()
         return response['result']['address']
 
+    def get_raw_address(self):
+        return self.raw_address
+
     def _get_raw_address(self):
         def register(self, timeout=0):
             payload = {
