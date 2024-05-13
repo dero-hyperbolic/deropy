@@ -46,18 +46,23 @@ class SmartContract:
         if SmartContract.SCID is None:
             SmartContract.SCID = sha256(str(time.time()*2).encode()).hexdigest()
 
+    @staticmethod
+    def reset():
+        SmartContract.storage = dict()
+        SmartContract.memory = dict()
+        SmartContract.gasStorage = []
+        SmartContract.gasCompute = []
+        SmartContract.SCID = None
+
     def read(self):
         storage = SmartContract.storage
 
         for k, v in storage.items():
-            print(f'processing variable {k} value {v}')
             if k == "C":
                 continue
             if isinstance(v, str):
                 try:
-                    print(f'decoding hex: {v} to utf-8')
                     storage[k] = bytes.fromhex(v).decode("utf-8")
-                    print(f'decoded value: {storage[k]}')
                 except:
                     pass
         return storage
