@@ -92,10 +92,11 @@ def _generate_class(file: str, scid: str, output: str = None):
 
     output_path = output if output is not None else 'SC.py'
 
+    # retrieve the exact name of the class from the file
     class_name = os.path.basename(file)
     class_name = class_name.split('.')[0]
     class_name = class_name.capitalize()
-
+            
     lines = ['import requests']
     lines += ['import json\n']
     lines += [f'class {class_name}:']
@@ -168,7 +169,20 @@ def _generate_read_method(scid):
         '        response = requests.post(url, data=json.dumps(payload), headers=self.headers)',
         '        # keep only the `stringkeys` and `variables`',
         '        data = response.json()',
-        '        self.storage = data["result"]["stringkeys"]',
+        '        stringkeys = data["result"]["stringkeys"]',
+        '        # for each key, if it is a string, decode the hex string to a string',
+        '        for k, v in stringkeys.items():',
+        '            if k == "C":',
+        '                continue',
+        '            if isinstance(v, str):',
+        '                try:',
+        '                    stringkeys[k] = bytes.fromhex(v).decode("utf-8")',
+        '                except:',
+        '                    pass',
+        '        # store the result and overwrite C',
+        '        stringkeys["C"] = ""',
+        '        self.storage = stringkeys',
+
         '        return self.storage',
     ]
 
@@ -181,9 +195,9 @@ def _generate_method_scinvoce(f_name, p, class_name):
     method_parameters = method_parameters[:-2]
 
     if len(method_parameters) == 0:
-        lines = [f'\n    def {f_name}(self, dero_deposit: int = 0, asset_deposit: int = 0, host: str = None):']
+        lines = [f'\n    def {f_name}(self, dero_deposit: int = 0, asset_deposit: tuple = (0, ), host: str = None):']
     else:
-        lines = [f'\n    def {f_name}(self, {method_parameters}, dero_deposit: int = 0, asset_deposit: int = 0, host: str = None):']
+        lines = [f'\n    def {f_name}(self, {method_parameters}, dero_deposit: int = 0, asset_deposit: tuple = (0, ), host: str = None):']
 
     scrpc = [
         '                    "sc_rpc": [',
@@ -215,7 +229,7 @@ def _generate_method_scinvoce(f_name, p, class_name):
     if f_name != 'Initialize':
         payload += [
             '                    "sc_dero_deposit": dero_deposit,',
-            '                    "sc_asset_deposit": asset_deposit,',
+            '                    "sc_token_deposit": asset_deposit[0] if asset_deposit is not None else 0,',
         ]
     payload += scrpc
     payload += [
