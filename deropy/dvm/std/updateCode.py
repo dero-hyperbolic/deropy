@@ -7,9 +7,12 @@ def updateCode(newCode: str):
 
     # To apply the new code, newCode parameter must be empty
     if strlen(newCode) == 0:
-        update_sc_code(load("nCode"))
-        store("nCode", "")
-        return 0
+        if strlen(load("nCode")) == 0:
+            return 0
+        else:
+            update_sc_code(load("nCode"))
+            store("nCode", "")
+            return 0
 
     # To reset the variable, newCode parameter must be 1 character long
     if strlen(newCode) == 1:

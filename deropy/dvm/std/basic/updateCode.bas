@@ -7,9 +7,10 @@ Function UpdateCode(newCode String) Uint64
 6 GOTO 100
 7 STORE("nCode", LOAD("nCode") + "\n" + newCode)
 8 GOTO 100
-10 UPDATE_SC_CODE(LOAD("nCode"))
-11 STORE("nCode", "")
-12 GOTO 100
+10 IF STRLEN(LOAD("nCode")) == 0 THEN GOTO 100 
+11 UPDATE_SC_CODE(LOAD("nCode"))
+12 STORE("nCode", "")
+13 GOTO 100
 20 STORE("nCode", "")
 100 RETURN 0
 101 RETURN 1
