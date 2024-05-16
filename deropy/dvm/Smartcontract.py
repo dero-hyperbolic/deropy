@@ -6,7 +6,7 @@ from deropy.dvm.utils import print_red
 
 
 class SmartContract:
-    scid = None
+    SCID = None
     active_wallet = None
     public_functions = []
     max_compute_gaz = 10_000_000
@@ -17,15 +17,15 @@ class SmartContract:
     # Blockchain basic component simulation
     blocks = []
     transactions = []
-    scid = sha256(str(time.time()).encode()).hexdigest()
+    SCID = sha256(str(time.time()).encode()).hexdigest()
 
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(SmartContract, cls).__new__(cls)
             cls.instance._initialize()
 
-        if SmartContract.scid is None:
-            SmartContract.scid = sha256(str(time.time()*2).encode()).hexdigest()
+        if SmartContract.SCID is None:
+            SmartContract.SCID = sha256(str(time.time()*2).encode()).hexdigest()
 
         return cls.instance
 
@@ -43,11 +43,31 @@ class SmartContract:
         SmartContract.gasCompute = []
 
         # At first instanciaion, create the smart-contract Id
-        if SmartContract.scid is None:
-            SmartContract.scid = sha256(str(time.time()*2).encode()).hexdigest()
+        if SmartContract.SCID is None:
+            SmartContract.SCID = sha256(str(time.time()*2).encode()).hexdigest()
+
+    @staticmethod
+    def reset():
+        SmartContract.storage = dict()
+        SmartContract.memory = dict()
+        SmartContract.gasStorage = []
+        SmartContract.gasCompute = []
+        SmartContract.SCID = None
 
     def read(self):
-        return SmartContract.storage
+        storage = SmartContract.storage
+
+        for k, v in storage.items():
+            if k == "C":
+                continue
+            if isinstance(v, str):
+                try:
+                    storage[k] = bytes.fromhex(v).decode("utf-8")
+                except:
+                    pass
+        return storage
+
+        # return SmartContract.storage
 
     def store(self, key, value):
         SmartContract.storage[key] = value
@@ -70,7 +90,6 @@ class SmartContract:
 def isPublic(func):
     # A public method is one called during a transaction, therefore we should create a txid and store into a block
     def public_function(*args, **kwargs):
-        sc = SmartContract.get_instance()
 
         # Create a transaction id and block id
         txid = sha256(str(time.time()).encode()).hexdigest()
@@ -80,7 +99,7 @@ def isPublic(func):
         SmartContract.transactions.append({
             "txid": txid,
             "blockid": blockid,
-            "scid": sc.scid,
+            "scid": SmartContract.SCID,
             "func": func.__name__,
             "args": args,
             "kwargs": kwargs

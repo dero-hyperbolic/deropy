@@ -1,5 +1,6 @@
 import json, ast, inspect
 
+from deropy.dvm.functions import __all__ as all_functions
 import deropy.dvm.dast.dast_converter as dast_converter
 
 
@@ -47,7 +48,10 @@ class FunctionCall():
         
             str_args.append(str(a))
         
-        return f"{self.name.upper()}({', '.join([a for a in str_args])})"
+        function_name = self.name
+        if function_name in all_functions:
+            function_name = self.name.upper()
+        return f"{function_name}({', '.join([a for a in str_args])})"
     
     def __repr__(self):
         return str(self)

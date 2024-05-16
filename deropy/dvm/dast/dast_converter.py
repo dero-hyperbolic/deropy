@@ -18,6 +18,7 @@ def to_dast(json_object: dict):
         "Assignment": dast.Assignment.from_intermediate_ast,
         "Goto": dast.Goto.from_intermediate_ast,
         "WhileLoop": dast.WhileLoop.from_intermediate_ast,
+        "Comment": dast.Comment.from_intermediate_ast,
     }
     json_type = json_object["type"]
     if json_type in type_mapping:

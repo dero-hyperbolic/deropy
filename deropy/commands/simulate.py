@@ -133,7 +133,11 @@ def read_until(q, expected, timeout=20):
                 break
             timeout -= 0.1
 
+
 def read_until_empty(q):
+    print("\n\n\n")
+    print("Reading the output from the simulator")
+    print("\n\n\n")
     while True:
         try:
             line = q.get_nowait()

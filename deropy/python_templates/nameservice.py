@@ -1,5 +1,6 @@
 from deropy.dvm.functions import exists, store, load, strlen, signer, address_raw
 from deropy.dvm.Smartcontract import SmartContract, logger, sc_logger
+from deropy.dvm.std import updateCode
 
 
 @sc_logger(logger)

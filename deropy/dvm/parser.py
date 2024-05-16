@@ -2,20 +2,53 @@ import inspect
 import json
 import ast
 import sys
+import os
+
 
 import deropy.dvm.iast.iast_converter as iast_converter
 import deropy.dvm.dast as dast
+import deropy.dvm.std as std
 from deropy.dvm.dast import *
 from deropy.dvm.utils import flatten_list
+
+
+standard_library_functions = []
+header_comment = []
 
 
 def load_dast(str_func_name, obj):
     return globals()[str_func_name].from_intermediate_ast(obj)
 
 
+def load_std_function(import_line):
+    function_names = import_line.split("import ")[1]
+    function_names = function_names.replace('\n', '')
+
+    if ',' in function_names:
+        function_names = function_names.split(',')
+    else:
+        function_names = [function_names]
+
+    for func in function_names:
+        func = func.strip()
+        root_directory = os.path.dirname(inspect.getfile(std))
+        std_basic_path = os.path.join(root_directory, 'basic')
+
+        with open(os.path.join(std_basic_path, f'{func}.bas'), 'r') as fi:
+            code = fi.readlines()
+            code.append('\n')
+
+        standard_library_functions.append(code)
+
+
 def file_to_iast(path):
     with open(path, "r") as f:
         code = f.readlines()
+
+    # Collect all the standard library functions
+    for line in code:
+        if "deropy.dvm.std" in line:
+            load_std_function(line)
 
     # remove all lines that are comments, or imports
     code = [line for line in code if not line.startswith("#") and not line.startswith("import") and not line.startswith("from")]
@@ -31,6 +64,9 @@ def file_to_iast(path):
             inside = line[start+4:end]
             code[i] = line[:start] + inside + line[end+1:]
         i += 1
+
+    # remove all the self. from the code
+    code = [line.replace('self.', '') for line in code]
 
     code = "".join(code)
     tree = ast.parse(code)
@@ -56,17 +92,21 @@ def tree_to_iast(tree):
 def parse(path, output_path=None):
     parsed = file_to_iast(path)
 
-    # if output_path exists, overwrite it
-    if output_path is not None:
-        with open(output_path, 'w') as f:
-            f.write('')
+    if output_path is None:
+        output_path = path.replace(".py", ".bas")
+
+    all_functions = []
 
     for f in parsed:
-        func_dvm = []
-
+            
         json_function = json.loads(f.to_json())
 
         func = load_dast(json_function["type"], json_function)
+
+        if isinstance(func, Comment):
+            header_comment.append(str(func))
+            continue
+
         flatten_func_body = []
         for b in func.body:
             if isinstance(b, list):
@@ -124,21 +164,35 @@ def parse(path, output_path=None):
 
             i += 1
 
-        # print the DVM-BASIC code
-        print(func)
-        for i, b in enumerate(flatten_func_body):
+        all_functions.append((func, flatten_func_body))
+
+    # print the DVM-BASIC code
+    # first the header comment
+    for hc in header_comment:
+        print(hc)
+
+    for func_name, func_body in all_functions:
+        print(func_name)
+        for i, b in enumerate(func_body):
             print(f'{i+1} {load_dast(b["type"], b)}')
         print('End Function\n')
 
-        # Write the DVM-BASIC code to a file
-        if output_path is None:
-            output_path = path.split('.')[0] + '.bas'
+    for std_func in standard_library_functions:
+        print(''.join(std_func))
 
-        with open(output_path, 'a') as f:
-            f.write(f'{func}\n')
-            for i, b in enumerate(flatten_func_body):
+    with open(output_path, 'w') as f:
+        # first the header comment
+        for hc in header_comment:
+            f.write(hc)
+        f.write('\n')
+        for func_name, func_body in all_functions:
+            f.write(f'{func_name}\n')
+            for i, b in enumerate(func_body):
                 f.write(f'{i+1} {load_dast(b["type"], b)}\n')
             f.write('End Function\n\n')
+
+        for std_func in standard_library_functions:
+            f.write(''.join(std_func))
 
 
 if __name__ == "__main__":

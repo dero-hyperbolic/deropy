@@ -13,3 +13,4 @@ from .binaryOperator import BinaryOperator
 from .argument import Argument
 from .goto import Goto
 from .whileLoop import WhileLoop
+from .comment import Comment

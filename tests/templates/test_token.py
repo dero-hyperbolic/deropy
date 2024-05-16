@@ -1,11 +1,20 @@
+import pytest
 from deropy.wallet.wallet_factory import WalletFactory
-from deropy.dvm.tester import simulator_setup
+from deropy.dvm.tester import simulator_setup, clean_simulator
 
 
-simulator, SmartContractClass = simulator_setup('deropy.python_templates.token', 'Token')
-wl_hyperbolic = WalletFactory.create_wallet('hyperbolic', simulator)
-wl_random = WalletFactory.create_wallet('random_user', simulator)
-sc = SmartContractClass()
+@pytest.fixture(scope='class', autouse=True)
+def initialize_test_suite():
+    global simulator, sc, SmartContract, wl_hyperbolic, wl_user1
+
+    simulator, SmartContract = simulator_setup('deropy.python_templates.token', 'Token')
+    wl_hyperbolic = WalletFactory.create_wallet('hyperbolic', simulator)
+    wl_user1 = WalletFactory.create_wallet('wallet_user1', simulator)
+    sc = SmartContract()
+
+    yield 
+
+    clean_simulator()
 
 
 class TestNameService:
@@ -15,7 +24,7 @@ class TestNameService:
         assert storage['owner'] == wl_hyperbolic.raw_address
 
     def test_initialize_cant_be_called_twice(self):
-        wl_random.invoke_sc_function(sc.InitializePrivate)
+        wl_user1.invoke_sc_function(sc.InitializePrivate)
         storage = sc.read()
         assert storage['owner'] == wl_hyperbolic.raw_address
 

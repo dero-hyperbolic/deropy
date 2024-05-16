@@ -34,6 +34,10 @@ class Operator(iast.IastNode):
             return cls("*")._invert()
         if isinstance(node, ast.Div):
             return cls("/")._invert()
+        if isinstance(node, ast.BitAnd):
+            return cls("&")._invert()
+        if isinstance(node, ast.BitOr):
+            return cls("|")._invert()
         else:
             raise ValueError(f"Unknown operator: {node}")
         

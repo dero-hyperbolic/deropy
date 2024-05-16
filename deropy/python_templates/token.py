@@ -1,6 +1,7 @@
 from deropy.dvm.functions import exists, store, load, derovalue, assetvalue, signer, address_raw, send_dero_to_address
 from deropy.dvm.functions import send_asset_to_address, scid
 from deropy.dvm.Smartcontract import SmartContract, logger, sc_logger
+from deropy.dvm.std import updateCode
 
 
 @sc_logger(logger)
