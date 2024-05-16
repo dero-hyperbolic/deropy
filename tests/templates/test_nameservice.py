@@ -1,13 +1,21 @@
+import pytest
 from deropy.wallet.wallet_factory import WalletFactory
-from deropy.dvm.tester import simulator_setup
+from deropy.dvm.tester import simulator_setup, clean_simulator
 
 
-simulator, SmartContractClass = simulator_setup('deropy.python_templates.nameservice', 'NameService')
-wl_hyperbolic = WalletFactory.create_wallet('hyperbolic', simulator)
-wl_new = WalletFactory.create_wallet('new_owner', simulator)
-wl_random = WalletFactory.create_wallet('random_user', simulator)
-wl_hardcoded = WalletFactory.create_wallet_from_public_key('hardcoded', 'deto1qyvyeyzrcm2fzf6kyq7egkes2ufgny5xn77y6typhfx9s7w3mvyd5qqynr5hx')
-sc = SmartContractClass()
+@pytest.fixture(scope='class', autouse=True)
+def initialize_test_suite():
+    global simulator, sc, SmartContract, wl_hyperbolic, wl_user1, wl_user2
+
+    simulator, SmartContract = simulator_setup('deropy.python_templates.nameservice', 'NameService')
+    wl_hyperbolic = WalletFactory.create_wallet('hyperbolic', simulator)
+    wl_user1 = WalletFactory.create_wallet('wallet_user1', simulator)
+    wl_user2 = WalletFactory.create_wallet('wallet_user2', simulator)
+    sc = SmartContract()
+
+    yield 
+
+    clean_simulator()
 
 
 class TestNameService:
@@ -27,20 +35,20 @@ class TestNameService:
         assert storage["hyperbolic"] == wl_hyperbolic.raw_address
 
     def test_register_name_already_exists(self):
-        wl_random.invoke_sc_function(sc.Register, "hyperbolic")
+        wl_user1.invoke_sc_function(sc.Register, "hyperbolic")
         storage = sc.read()
         assert "hyperbolic" in storage
         assert storage["hyperbolic"] == wl_hyperbolic.raw_address
 
     # Test the TransferOwnership function
     def test_transfer_ownership(self):
-        wl_hyperbolic.invoke_sc_function(sc.TransferOwnership, ("hyperbolic", wl_new.string_address))
+        wl_hyperbolic.invoke_sc_function(sc.TransferOwnership, ("hyperbolic", wl_user2.string_address))
         storage = sc.read()
-        assert storage["hyperbolic"] == wl_new.raw_address
+        assert storage["hyperbolic"] == wl_user2.raw_address
 
     def test_transfer_ownership_wrong_owner(self):
-        wl_random.invoke_sc_function(sc.TransferOwnership, ("hyperbolic", wl_new.string_address))
+        wl_user1.invoke_sc_function(sc.TransferOwnership, ("hyperbolic", wl_user2.string_address))
         storage = sc.read()
-        assert storage["hyperbolic"] == wl_new.raw_address
-        assert storage["hyperbolic"] != wl_random.raw_address
+        assert storage["hyperbolic"] == wl_user2.raw_address
+        assert storage["hyperbolic"] != wl_user1.raw_address
         assert storage["hyperbolic"] != wl_hyperbolic.raw_address

@@ -1,23 +1,22 @@
+import pytest
 from deropy.wallet.wallet_factory import WalletFactory
-from deropy.dvm.tester import simulator_setup
+from deropy.dvm.tester import simulator_setup, clean_simulator
 
 
-# By default there is two global variables created by the simulator_setup fixture
-# simulator: boolean that indicates if the tests are running in a simulator
-# SmartContract: the class of the smart contract
+@pytest.fixture(scope='class', autouse=True)
+def initialize_test_suite():
+    global simulator, sc, SmartContract, wl_hyperbolic, wl_bisounours, wl_user1, wl_user2
 
-# The function simulator_setup has to be called with a function that setups the wallets
-# its role is to ensure that the wallets are associated with the simulator json_rpc endpoints to
-# correspond to the wallets already created in the simulator
+    simulator, SmartContract = simulator_setup('deropy.python_templates.lottery', 'Lottery')
+    wl_hyperbolic = WalletFactory.create_wallet('hyperbolic', simulator)
+    wl_bisounours = WalletFactory.create_wallet('bisounours', simulator)
+    wl_user1 = WalletFactory.create_wallet('wallet_user1', simulator)
+    wl_user2 = WalletFactory.create_wallet('wallet_user2', simulator)
+    sc = SmartContract()
 
+    yield 
 
-global simulator, SmartContract
-simulator, SmartContract = simulator_setup('deropy.python_templates.lottery', 'Lottery')
-
-wl_hyperbolic = WalletFactory.create_wallet('hyperbolic', simulator)
-wl_new = WalletFactory.create_wallet('new_owner', simulator)
-wl_random = WalletFactory.create_wallet('random_user', simulator)
-sc = SmartContract()
+    clean_simulator()
 
 
 class TestLottery:
@@ -31,7 +30,7 @@ class TestLottery:
         assert storage['lotterygiveback'] == 9900
 
     def test_initialize_cant_be_called_twice(self):
-        wl_random.invoke_sc_function(sc.Initialize)
+        wl_user1.invoke_sc_function(sc.Initialize)
         storage = sc.read()
         assert storage['owner'] == wl_hyperbolic.raw_address
 
@@ -56,31 +55,31 @@ class TestLottery:
         assert storage['lotterygiveback'] == 9000
 
     def test_tune_non_owner(self):
-        wl_random.invoke_sc_function(sc.TuneLotteryParameters, (2, 9900))
+        wl_user1.invoke_sc_function(sc.TuneLotteryParameters, (2, 9900))
         storage = sc.read()
         assert storage['lotteryeveryXdeposit'] == 10
         assert storage['lotterygiveback'] == 9000
 
     def test_transfer_ownership(self):
-        wl_hyperbolic.invoke_sc_function(sc.TransferOwnership, wl_new.string_address)
+        wl_hyperbolic.invoke_sc_function(sc.TransferOwnership, wl_user2.string_address)
         storage = sc.read()
-        assert storage['tmpowner'] == wl_new.raw_address
+        assert storage['tmpowner'] == wl_user2.raw_address
 
     def test_claim_ownership_random(self):
-        wl_random.invoke_sc_function(sc.ClaimOwnership)
+        wl_user1.invoke_sc_function(sc.ClaimOwnership)
         storage = sc.read()
-        assert storage['owner'] != wl_random.raw_address
+        assert storage['owner'] != wl_user1.raw_address
         assert storage['owner'] == wl_hyperbolic.raw_address
 
     def test_claim_ownership(self):
-        wl_new.invoke_sc_function(sc.ClaimOwnership)
+        wl_user2.invoke_sc_function(sc.ClaimOwnership)
         storage = sc.read()
-        assert storage['owner'] == wl_new.raw_address
+        assert storage['owner'] == wl_user2.raw_address
 
     def test_withdraw_random(self):
-        wl_random.invoke_sc_function(sc.Withdraw, 1000)
+        wl_user1.invoke_sc_function(sc.Withdraw, 1000)
         storage = sc.read()
         assert storage['deposit_total'] == 1000
 
     def test_withdraw(self):
-        wl_new.invoke_sc_function(sc.Withdraw, 1000)
+        wl_user2.invoke_sc_function(sc.Withdraw, 1000)
