@@ -10,7 +10,10 @@ class Hex(Function):
 
     def _exec(self, *args, **kwargs):
         self.parameters["s"]["value"] = kwargs["s"]
-        return "".join("{:02x}".format(c) for c in kwargs["s"].encode())
+        if isinstance(kwargs["s"], str):
+            return "".join("{:02x}".format(c) for c in kwargs["s"].encode())
+        else:
+            return "%x" % kwargs["s"]
 
     def _computeGasStorageCost(self):
         return 0
