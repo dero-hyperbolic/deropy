@@ -14,9 +14,4 @@ class Minimal(SmartContract):
         else:
             return 1
 
-    def UpdateSC(self, new_code: str) -> int:
-        if signer() != load("owner"):
-            return 1
-
-        update_sc_code(new_code)
-        return 0
+    

@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='deropy',
-    version=os.getenv('DEROPY_VERSION') or '0.3.0',
+    version=os.getenv('DEROPY_VERSION') or '0.3.1',
     url='https://github.com/dero-hyperbolic/deropy.git',
     author_email='leocances@gmail.com',
     description='A set of tool to help of DERO smart contract development',
@@ -21,7 +21,10 @@ setup(
     ],
     include_package_data=True,
     package_data={
-        'deropy': ['dvm/std/basic/*.bas']
+        'deropy': [
+            'dvm/std/basic/*.bas',
+            'data/new_project_template/**/*',
+        ]
     },
     classifiers=[
         'Programming Language :: Python :: 3',

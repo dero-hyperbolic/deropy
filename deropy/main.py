@@ -6,6 +6,7 @@ from deropy.commands.generate import generate
 from deropy.commands.deploy import deploy
 from deropy.commands.simulate import simulate
 from deropy.commands.transpile import transpile
+from deropy.commands.create import create
 
 init_logger('deropy')
 
@@ -24,6 +25,7 @@ deropy.add_command(deploy)
 deropy.add_command(configure)
 deropy.add_command(simulate)
 deropy.add_command(transpile)
+deropy.add_command(create)
 
 if __name__ == '__main__':
     deropy()
