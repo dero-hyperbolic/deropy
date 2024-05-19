@@ -6,13 +6,13 @@ from deropy.wallet.wallet_simulator import WalletSimulator
 
 
 class Wallet:
-    def __init__(self, name, id, simulator: bool = False):
+    def __init__(self, name, idx, simulator: bool = False):
         self.logger = logging.getLogger('deropy')
         self.logger.info(f'Creating wallet "{name}" (simulator: {simulator})')
         self.raw_address = None
         self.string_address = None
         self.name = name
-        self.id = id
+        self.idx = idx
 
         self._init()
 

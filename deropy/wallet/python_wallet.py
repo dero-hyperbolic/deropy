@@ -7,10 +7,10 @@ from deropy.wallet.wallet import Wallet
 
 class PythonWallet(Wallet):
     def __init__(self, name, id):
-        super().__init__(self, name, id)
+        super().__init__(name, id)
 
     def _init(self):
-        self.string_address = hashlib.sha256(str(self.name).encode()).hexdigest()
+        self.string_address = hashlib.sha256(self.name.encode()).hexdigest()
         self.raw_address = self.string_address[:33]
         self.balance = {}
 

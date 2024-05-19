@@ -11,26 +11,26 @@ class WalletSimulator:
 
     @staticmethod
     def find_wallet_id_from_string(string_address):
-        for id, wallet in WalletSimulator.wallets.items():
+        for idx, wallet in WalletSimulator.wallets.items():
             if wallet.string_address == string_address:
-                return id
+                return idx
         raise Exception("Wallet not found")
 
     @staticmethod
     def find_wallet_id_from_raw(raw_address):
-        for id, wallet in WalletSimulator.wallets.items():
+        for idx, wallet in WalletSimulator.wallets.items():
             if wallet.raw_address == raw_address:
-                return id
+                return idx
         raise Exception("Wallet not found")
 
     @staticmethod
     def get_wallet_from_raw(raw_address):
-        id = WalletSimulator.find_wallet_id_from_raw(raw_address)
-        return WalletSimulator.get_wallet_from_id(id)
+        idx = WalletSimulator.find_wallet_id_from_raw(raw_address)
+        return WalletSimulator.get_wallet_from_id(idx)
 
     @staticmethod
-    def get_wallet_from_id(id):
-        return WalletSimulator.wallets[id]
+    def get_wallet_from_id(idx):
+        return WalletSimulator.wallets[idx]
 
     @staticmethod
     def get_raw_address():
@@ -41,11 +41,11 @@ class WalletSimulator:
         return WalletSimulator.wallets[WalletSimulator.active_wallet].string_address
 
     @staticmethod
-    def get_raw_address_from_id(id):
-        return WalletSimulator.wallets[id].raw_address
+    def get_raw_address_from_id(idx):
+        return WalletSimulator.wallets[idx].raw_address
 
-    def get_string_address_from_id(id):
-        return WalletSimulator.wallets[id].string_address
+    def get_string_address_from_id(idx):
+        return WalletSimulator.wallets[idx].string_address
 
     @staticmethod
     def is_initialized():
